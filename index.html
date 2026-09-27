@@ -642,6 +642,7 @@ function schedule(){
 }
 
 // ================= online (peer-to-peer) =================
+const APP_VER='0927c';
 const PREFIX='xjsh-v1-';
 const NET={ready:true,role:null,peer:null,conns:new Map(),hostConn:null,code:null,doc:null,myId:null,myName:'',busy:false,err:'',status:'',online:new Set(),retryT:null,everConnected:false,resuming:false};
 NET.myId=(()=>{let id='';try{id=localStorage.getItem('xjsh-pid')||'';if(!id){id='p_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);localStorage.setItem('xjsh-pid',id)}}catch(e){id='t_'+Math.random().toString(36).slice(2,10)}return id})();
@@ -706,7 +707,7 @@ function refreshOnline(){NET.online=new Set([NET.myId,...[...NET.conns.values()]
 function sendTo(conn,msg){try{if(conn&&conn.open)conn.send(msg)}catch(e){}}
 function broadcast(){
   if(NET.role!=='host')return;
-  const msg={t:'sync',doc:NET.doc,G:G,online:[...NET.online]};
+  const msg={t:'sync',doc:NET.doc,G:G,online:[...NET.online],ver:APP_VER};
   for(const {conn} of NET.conns.values())sendTo(conn,msg);
 }
 function hostRecv(conn,d){
@@ -715,6 +716,7 @@ function hostRecv(conn,d){
   if(d.t==='hello'){
     const pid=String(d.pid||'').slice(0,40),name=String(d.name||'玩家').slice(0,10)||'玩家';
     if(!pid)return;
+    if(d.ver!==APP_VER){sendTo(conn,{t:'err',msg:`你的遊戲版本（${d.ver||'舊版'}）和房主（${APP_VER}）不同。請關掉這個分頁，重新打開遊戲網址後再加入。`,fatal:true});setTimeout(()=>{try{conn.close()}catch(e){}},600);flashMsg(`${name} 的遊戲是舊版本，已請他重新整理後再加入`);return}
     NET.conns.set(conn.peer,{conn,pid});
     if(doc.status==='lobby'){
       let s=doc.seats.find(x=>x.uid===pid);
@@ -787,7 +789,7 @@ function hostStart(){
   const seats=doc.seats.filter(s=>s.type!=='open');if(seats.length<2)return;
   let ai=0;const names=['星語','鐵砧','夜梟'];
   newGame(seats.map(s=>s.type==='human'?{name:s.nick||'玩家',uid:s.uid,type:'human'}:{name:names[ai++]||'電腦',type:'ai',level:s.level||2}));
-  G.turnAt=Date.now();doc.status='playing';
+  G.turnAt=Date.now();G.ver=APP_VER;doc.status='playing';
   const me=G.players.findIndex(p=>p.uid===NET.myId);UI.lastHuman=me>=0?me:0;
   persist();
 }
@@ -820,7 +822,7 @@ function connectHost(){
   if(NET.role!=='guest'||!NET.peer||NET.peer.destroyed)return;
   const c=NET.peer.connect(PREFIX+NET.code,{reliable:true});NET.hostConn=c;
   const to=setTimeout(()=>{if(!c.open&&NET.hostConn===c){try{c.close()}catch(e){}if(!NET.everConnected){NET.err='連不上房主。請確認房號正確，或換個網路（例如關閉 VPN）再試。';exitOnline()}else retryHost()}},15000);
-  c.on('open',()=>{clearTimeout(to);NET.everConnected=true;NET.status='';sendTo(c,{t:'hello',pid:NET.myId,name:nick()});render()});
+  c.on('open',()=>{clearTimeout(to);NET.everConnected=true;NET.status='';sendTo(c,{t:'hello',pid:NET.myId,name:nick(),ver:APP_VER});render()});
   c.on('data',guestRecv);
   c.on('close',()=>{clearTimeout(to);if(NET.hostConn===c&&NET.role==='guest'){NET.status='與房主斷線，重新連線中…';NET.online=new Set();render();retryHost()}});
   c.on('error',()=>{});
@@ -830,6 +832,7 @@ function guestRecv(d){
   if(!d||typeof d!=='object')return;
   if(d.t==='err'){NET.err=String(d.msg||'');if(d.fatal){setLastRoom(null);exitOnline()}else render();return}
   if(d.t==='sync'){
+    if(d.ver!==APP_VER){NET.err=`房主的遊戲是舊版本（${d.ver||'舊版'}），你的是 ${APP_VER}。請房主關掉分頁、重新打開網址後再建立房間。`;setLastRoom(null);exitOnline();return}
     NET.doc=d.doc;NET.online=new Set(d.online||[]);NET.busy=false;clearTimeout(NET.ackT);
     const prev=G?G.turnId:-1;G=d.G||null;
     if(G){if(G.turnId!==prev){UI.sel=[];UI.hint=null;UI.sheet=null;UI.flash=true}const me=G.players.findIndex(p=>p.uid===NET.myId);UI.lastHuman=me>=0?me:0}
@@ -843,7 +846,7 @@ function guestSend(msg){
   NET.busy=true;NET.pendingMsg=msg;sendTo(NET.hostConn,msg);
   clearTimeout(NET.ackT);let tries=0;
   const chk=()=>{if(!NET.busy||NET.role!=='guest')return;tries++;
-    if(tries<=2&&NET.hostConn&&NET.hostConn.open){sendTo(NET.hostConn,{t:'hello',pid:NET.myId,name:nick()});sendTo(NET.hostConn,msg);NET.ackT=setTimeout(chk,4000);return}
+    if(tries<=2&&NET.hostConn&&NET.hostConn.open){sendTo(NET.hostConn,{t:'hello',pid:NET.myId,name:nick(),ver:APP_VER});sendTo(NET.hostConn,msg);NET.ackT=setTimeout(chk,4000);return}
     NET.busy=false;flashMsg('房主沒有回應，請再操作一次');connectHost()};
   NET.ackT=setTimeout(chk,4000);
 }
@@ -1104,11 +1107,11 @@ function menuHTML(){
   }else{
     body=onlineMenuHTML()+`<div class="acts">${cancel}<button class="btn" data-act="rules">規則</button></div>`;
   }
-  return `<div class="sheet setup"><h2>星晶守護者</h2><div class="sub">收集五色晶石，招募英雄，解放據點，奪取星核。</div>${tabs}${body}</div>`;
+  return `<div class="sheet setup"><h2>星晶守護者</h2><div class="sub">收集五色晶石，招募英雄，解放據點，奪取星核。<span style="float:right;font-family:var(--fn);color:var(--dim)">版本 ${APP_VER}</span></div>${tabs}${body}</div>`;
 }
 function onlineMenuHTML(){
   const m=UI.menu;const h=loadHost();const lr=lastRoom();
-  const resume=(h?`<div class="roomrow"><span class="rc">${esc(h.code)}</span><span class="rm">你主持的房間${h.G&&!h.G.over?'・對局進行中':''}</span><button class="btn sm" data-act="resumehost">繼續主持</button></div>`:'')+
+  const resume=(h?`<div class="roomrow"><span class="rc">${esc(h.code)}</span><span class="rm">你主持的房間${h.G&&!h.G.over?'・對局進行中':''}${h.G&&h.G.ver!==APP_VER?'（舊版牌組，開新局才會套用新內容）':''}</span><button class="btn sm" data-act="resumehost">繼續主持</button></div>`:'')+
     (lr&&(!h||h.code!==lr)?`<div class="roomrow"><span class="rc">${esc(lr)}</span><span class="rm">上次加入的房間</span><button class="btn sm" data-act="joinlast">回到房間</button></div>`:'');
   return `${hasPeer()?'':'<div class="errmsg" style="margin:0 0 10px">連線元件載入失敗，請確認網路後重新整理頁面。</div>'}
    <div class="sublab">你的暱稱</div><div class="fld"><input id="nick" maxlength="10" value="${esc(nick())}" data-nick="1" aria-label="暱稱"></div>
