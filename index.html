@@ -109,13 +109,14 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .chip{width:22cqw;height:22cqw;border-radius:50%;display:grid;place-items:center;font-family:var(--fn);font-weight:700;font-size:14cqw;line-height:1;color:#fff;text-shadow:0 1px 1px #000b;
   background:radial-gradient(circle at 38% 34%,color-mix(in srgb,var(--gc) 55%,white),var(--gc) 55%,color-mix(in srgb,var(--gc) 55%,black));box-shadow:0 0 0 1px #0008}
 .k-y.chip,.k-w.chip{color:#1b1a2e;text-shadow:none}
-.chip.have{box-shadow:0 0 0 1px #0008,0 0 0 2.4cqw #ffffffb0}
+.chip.have{width:17cqw;height:17cqw;margin:2.5cqw;border-radius:2.5cqw;transform:rotate(45deg);background:linear-gradient(135deg,color-mix(in srgb,var(--gc) 45%,white) 0%,var(--gc) 45%,color-mix(in srgb,var(--gc) 55%,black) 100%);box-shadow:0 0 0 1px #0009,0 0 0 1.8cqw #ffffffcc}
+.chip.have span{transform:rotate(-45deg)}
 
 .side{display:contents}
-.bank{order:3}
-.opp{order:1}
-.board{order:2}
-.me{order:4}
+.board{order:1}
+.bank{order:2}
+.me{order:3}
+.opp{order:4}
 .logp{order:5}
 
 .tokens{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;justify-items:center}
@@ -230,12 +231,23 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .dot.on{background:var(--ok);box-shadow:0 0 6px var(--ok)}
 .pill.net{border-color:#3f6f8a;color:#9fdcff}
 
+
+.panel.me.myturn{border-color:var(--brass2);box-shadow:0 0 0 1px var(--brass2) inset,0 0 26px -4px #ecd49a88;animation:myglow 1.6s ease-in-out infinite alternate}
+.panel.bank.myturn{border-color:#ecd49a99;box-shadow:0 0 18px -6px #ecd49a88}
+@keyframes myglow{from{box-shadow:0 0 0 1px var(--brass2) inset,0 0 14px -6px #ecd49a66}to{box-shadow:0 0 0 1px var(--brass2) inset,0 0 30px -2px #ecd49acc}}
+.turnflag{display:flex;align-items:center;gap:10px;margin:-2px 0 12px;padding:10px 12px;border-radius:10px;background:linear-gradient(90deg,#e9cf8f,#c79a45);color:#1b1530;font-weight:700;font-size:14.5px;letter-spacing:.04em}
+.tf-dot{width:10px;height:10px;border-radius:50%;background:#1b1530;animation:pulse .7s infinite alternate;flex:none}
+#turnbanner{position:fixed;left:0;right:0;top:28%;z-index:60;display:grid;place-items:center;pointer-events:none}
+#turnbanner .tb-in{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px 44px;border-radius:16px;background:linear-gradient(180deg,#f3dea6,#c79a45);color:#1b1530;box-shadow:0 20px 60px #000c,0 0 0 2px #fff6 inset;animation:tbin 1.9s cubic-bezier(.2,.9,.3,1.2) forwards}
+#turnbanner small{font-size:12px;letter-spacing:.3em;font-weight:700;opacity:.7}
+#turnbanner b{font-family:var(--fd);font-weight:900;font-size:34px;letter-spacing:.14em}
+@keyframes tbin{0%{transform:scale(.6);opacity:0}14%{transform:scale(1.06);opacity:1}24%{transform:scale(1)}80%{opacity:1}100%{transform:translateY(-16px);opacity:0}}
 @media (min-width:980px){
-  .app{grid-template-columns:minmax(0,660px) minmax(290px,1fr);grid-template-areas:"top top" "board side" "me side";align-items:start}
+  .app{grid-template-columns:minmax(0,640px) minmax(340px,1fr);grid-template-areas:"top top" "board side" "bank side";grid-template-rows:auto auto 1fr;align-items:start}
   .top{grid-area:top}
   .board{grid-area:board}
-  .me{grid-area:me}
-  .side{display:flex;flex-direction:column;gap:14px;grid-area:side;position:sticky;top:12px}
+  .bank{grid-area:bank}
+  .side{display:flex;flex-direction:column;gap:14px;grid-area:side}
   .log{max-height:300px}
 }
 @media (max-width:520px){
@@ -272,7 +284,7 @@ const PAT={
     [0,{o0:2,o1:1},0,0,'鐵衛'],[0,{o0:2,o2:2},0,0,'信使'],[0,{o0:3},1,0,'獵人'],[1,{o1:4},0,0,'劍士']],
  2:[[1,{o0:2,o1:2,o2:3},1,0,'騎士'],[1,{own:2,o0:2,o1:3},0,0,'術士'],[2,{o0:1,o1:4,o2:2},1,0,'遊俠'],[2,{o0:5,o1:3},0,0,'機匠'],
     [2,{o2:5},0,0,'先知'],[3,{own:6},2,0,'劍聖']],
- 3:[[3,{o0:3,o1:3,o2:5,o3:3},1,1,'君主'],[4,{o0:7},2,0,'戰神'],[4,{own:3,o0:6,o1:3},0,1,'賢者'],[5,{own:3,o0:7},1,0,'守護神']]
+ 3:[[3,{o0:3,o1:3,o2:5,o3:3},1,1,'君主'],[4,{o0:7},2,0,'戰神'],[4,{own:3,o0:6,o1:3},1,1,'賢者'],[5,{own:3,o0:7},1,0,'守護神']]
 };
 const LOCS=[
  ['浮空港',{r:4,u:4}],['翡翠湖',{g:4,y:4}],['熔火鍛爐',{p:4,r:4}],['深海神殿',{u:4,g:4}],['雷鳴峽谷',{y:4,p:4}],
@@ -287,6 +299,7 @@ const PAL={
  y:{s1:'#16142a',s2:'#7a6428',cloth:'#c79a2a',dark:'#4a380f',glow:'#fff27a',land:'#1d1a2e'},
  p:{s1:'#0d0720',s2:'#4d2c80',cloth:'#6e3fb0',dark:'#28144d',glow:'#e3b8ff',land:'#130a28'}
 };
+const IRIS={r:'#c2410c',u:'#1d6fd6',g:'#15803d',y:'#b7791f',p:'#7e3fcf'};
 const SKIN=['#f3d0b0','#e6b48a','#c98d62','#9a6440','#f6dcc6','#d9a27a'];
 const HAIR=['#2a1c15','#5e3519','#b8873c','#e9e4d6','#7b2331','#26386b','#1c1c1c'];
 const ROLE={
@@ -395,27 +408,46 @@ function artSVG(c){
   let ch='';
   if(R.cape)ch+=`<path d="M24 94 Q7 118 3 140 L97 140 Q93 118 76 94 Z" fill="${P_.dark}"/><path d="M24 94 Q7 118 3 140 L12 140 Q16 118 30 98Z" fill="#000" opacity=".25"/>`;
   if(R.wings){const wg=`<path d="M40 94 Q14 70 2 36 Q18 56 28 58 Q10 64 8 78 Q22 74 30 80 Q16 88 18 98 Q30 92 38 98 Z" fill="#f4f0ff" opacity=".9"/><path d="M40 94 Q14 70 2 36 Q18 56 28 58" stroke="${P_.glow}" stroke-width="1" fill="none"/>`;ch+=wg+`<g transform="translate(100 0) scale(-1 1)">${wg}</g>`}
-  if(R.hair==='long')ch+=`<path d="M35 70 Q33 48 50 47 Q67 48 65 70 L69 106 Q58 99 50 99 Q42 99 31 106 Z" fill="${hair}"/>`;
+  const hstyle=Math.floor(rn()*3),iris=IRIS[c.color],hairHi='#ffffff';
+  if(R.hair==='long')ch+=`<path d="M35.5 70 Q33 49 50 48 Q67 49 64.5 70 L68.5 108 Q63 103 57 104 L55 96 Q50 99 45 96 L43 104 Q37 103 31.5 108 Z" fill="${hair}"/><path d="M36 76 L33.5 104" stroke="#000" stroke-opacity=".18" stroke-width="2"/>`;
+  else if(hstyle===2&&!['helmet','plume','hood','horns'].includes(R.hat))ch+=`<path d="M58 60 Q72 64 70 86 Q68 96 62 100 Q66 88 63 74 Q61 66 56 64Z" fill="${hair}"/>`;
   ch+=`<path d="M16 140 L19 110 Q21 95 38 91 L62 91 Q79 95 81 110 L84 140 Z" fill="${R.armor?M:P_.cloth}"/>`;
   if(R.armor)ch+=`<ellipse cx="25" cy="100" rx="11" ry="8" fill="${M}" stroke="#3a4260" stroke-width=".6"/><ellipse cx="75" cy="100" rx="11" ry="8" fill="${M}" stroke="#3a4260" stroke-width=".6"/><path d="M36 104 Q50 112 64 104" stroke="#3a4260" stroke-width=".8" fill="none"/><path d="M34 124 Q50 130 66 124" stroke="#3a4260" stroke-width=".8" fill="none"/><rect x="19" y="130" width="62" height="10" fill="${P_.cloth}"/>`;
   else ch+=`<path d="M40 91 L50 108 L60 91 Z" fill="${P_.dark}"/><path d="M50 108 L50 140" stroke="${P_.dark}" stroke-width="1.5"/><path d="M19 112 Q22 100 30 96" stroke="#000" stroke-width="3" opacity=".15" fill="none"/>`;
-  ch+=`<path d="M50 110 L55.5 117 L50 124 L44.5 117 Z" fill="${P_.glow}" stroke="#fff" stroke-width=".7"/>`;
+  ch+=`<path d="M62 91 Q79 95 81 110 L82.5 124" stroke="${P_.glow}" stroke-width="1.3" fill="none" opacity=".55"/>`;
+  if(!R.armor)ch+=`<path d="M38 91 Q50 99 62 91 L60 95 Q50 103 40 95Z" fill="${P_.glow}" opacity=".35"/>`;
+  ch+=`<path d="M50 110 L55.5 117 L50 124 L44.5 117 Z" fill="${P_.glow}" stroke="#fff" stroke-width=".7"/><path d="M50 112 L52.5 117 L50 119.5Z" fill="#fff" opacity=".6"/>`;
   ch+=`<rect x="45" y="78" width="10" height="14" fill="${skin}"/><rect x="45" y="85" width="10" height="5" fill="#000" opacity=".18"/>`;
   const covered=['helmet','plume','hood','horns'].includes(R.hat);
-  if(!R.hair&&!covered)ch+=`<ellipse cx="50" cy="66" rx="14" ry="13.5" fill="${hair}"/>`;
-  ch+=`<ellipse cx="50" cy="70" rx="11.5" ry="13" fill="${skin}"/><path d="M38.6 72 Q39 82 50 83.2 Q42 80 38.6 72Z" fill="#000" opacity=".12"/>`;
-  if(!covered&&!['wizard','feather','goggles'].includes(R.hat))ch+=`<path d="M38.4 68 Q39.5 55.5 50 55.5 Q61 55.5 61.6 68 Q56 61 50 62.5 Q44 61 38.4 68 Z" fill="${hair}"/>`;
-  else if(['wizard','feather'].includes(R.hat))ch+=`<path d="M38.5 66 Q40 60 50 60 Q60 60 61.5 66 Q55 63 50 64 Q45 63 38.5 66Z" fill="${hair}"/>`;
-  const glowEye=R.eyes==='glow'||(c.color==='p'&&rn()<.5);
-  const ec=glowEye?P_.glow:'#1d1420';
-  ch+=`<ellipse cx="45.5" cy="71.5" rx="1.6" ry="${glowEye?1.1:1.8}" fill="${ec}"/><ellipse cx="54.5" cy="71.5" rx="1.6" ry="${glowEye?1.1:1.8}" fill="${ec}"/>`;
-  if(glowEye)ch+=`<ellipse cx="50" cy="71.5" rx="9" ry="3" fill="${P_.glow}" opacity=".18"/>`;
-  ch+=`<path d="M44 68 L47.5 67.4 M52.5 67.4 L56 68" stroke="#2a1c15" stroke-width=".8"/><path d="M47.6 78 Q50 79.4 52.4 78" stroke="#7a3a2e" stroke-width=".8" fill="none"/>`;
-  if(R.beard)ch+=`<path d="M40 74 Q41 92 50 97 Q59 92 60 74 Q56 81 50 81 Q44 81 40 74 Z" fill="#ebe6d9"/>`;
+  if(!R.hair&&!covered)ch+=`<path d="M36 70 Q34.5 52.5 50 52 Q65.5 52.5 64 70 Q63 76 61 78 L39 78 Q37 76 36 70Z" fill="${hair}"/>`;
+  // ears + face
+  ch+=`<ellipse cx="38.6" cy="71" rx="1.8" ry="3" fill="${skin}"/><ellipse cx="61.4" cy="71" rx="1.8" ry="3" fill="${skin}"/>`;
+  ch+=`<path d="M38.6 68.5 Q38.6 56.8 50 56.8 Q61.4 56.8 61.4 68.5 Q61.4 77.5 55.8 82.2 Q50 86.2 44.2 82.2 Q38.6 77.5 38.6 68.5Z" fill="${skin}"/>`;
+  ch+=`<path d="M61.4 68.5 Q61.4 77.5 55.8 82.2 Q50 86.2 47 84.6 Q56 82 58.6 74 Q60 69 59.6 62 Q61.4 64.5 61.4 68.5Z" fill="#000" opacity=".1"/>`;
+  // eyes
+  const glowEye=R.eyes==='glow'||(c.color==='p'&&rn()<.4);
+  const eye=(x)=>`<path d="M${x-3.1} 70.6 Q${x} 67.4 ${x+3.1} 70.4 Q${x} 74.8 ${x-3.1} 70.6Z" fill="#fff"/><ellipse cx="${x+.1}" cy="71.1" rx="2.05" ry="2.55" fill="${glowEye?P_.glow:iris}"/><ellipse cx="${x+.1}" cy="71.5" rx="1.05" ry="1.4" fill="${glowEye?'#fff':'#140c1c'}"/><circle cx="${x-.6}" cy="70.2" r=".75" fill="#fff"/><path d="M${x-3.4} 70.5 Q${x} 67 ${x+3.3} 70.1" stroke="#1d1420" stroke-width="1.15" fill="none" stroke-linecap="round"/>`;
+  ch+=eye(45.2)+eye(54.8);
+  if(glowEye)ch+=`<ellipse cx="50" cy="71" rx="10" ry="3.4" fill="${P_.glow}" opacity=".22"/>`;
+  const brow=R.armor||R.wp==='axe'?'M42.2 66.2 L47.6 66.9 M52.4 66.9 L57.8 66.2':'M42.3 66.1 Q45 65 47.6 65.9 M52.4 65.9 Q55 65 57.7 66.1';
+  ch+=`<path d="${brow}" stroke="${hair==='#e9e4d6'?'#8a7f6a':hair}" stroke-width="1" fill="none" stroke-linecap="round"/>`;
+  ch+=`<path d="M50.2 73.6 L49.5 75.8 Q50 76.2 50.7 76" stroke="#000" stroke-opacity=".22" stroke-width=".6" fill="none"/>`;
+  ch+=`<ellipse cx="43" cy="75.4" rx="2.3" ry="1.1" fill="#ff7a7a" opacity=".22"/><ellipse cx="57" cy="75.4" rx="2.3" ry="1.1" fill="#ff7a7a" opacity=".22"/>`;
+  ch+=R.armor||R.wp==='axe'?`<path d="M47.6 79 L52.4 79" stroke="#8a3e32" stroke-width=".85" stroke-linecap="round"/>`:`<path d="M47.4 78.6 Q50 80.4 52.6 78.6" stroke="#8a3e32" stroke-width=".85" fill="none" stroke-linecap="round"/>`;
+  if(R.beard)ch+=`<path d="M40 74 Q41 92 50 97 Q59 92 60 74 Q56 81 50 81 Q44 81 40 74 Z" fill="#ebe6d9"/><path d="M45 80 Q50 82 55 80" stroke="#c9c2b0" stroke-width=".7" fill="none"/>`;
+  // bangs
+  const showBangs=!covered&&R.hat!=='goggles';
+  if(showBangs){
+    const bangs=[`M37.8 67 Q36.5 52.5 50 51.8 Q63.5 52.5 62.2 67 L60.2 60.5 L57.6 64.6 L55.6 58.6 L52.6 63.8 L50.2 57.8 L47.4 63.8 L44.8 58.6 L42.6 64.6 L40 60.5 Z`,
+      `M37.8 67.5 Q35.8 52 51 51.4 Q64.5 52 62.3 66 Q58.5 58.5 50.5 59.8 Q43.5 61.2 40.5 64.5 Q39 66 37.8 67.5Z`,
+      `M38 65.5 Q38.4 52.6 50 52.2 Q61.6 52.6 62 65.5 Q59.8 60.8 55.5 60.2 L53 63 L51 59.8 Q45 59.6 42.6 62.4 L41.2 60.8 Q39 62.5 38 65.5Z`][hstyle];
+    ch+=`<path d="${bangs}" fill="${hair}"/><path d="M42 56.5 Q47 54 53 54.6" stroke="${hairHi}" stroke-opacity=".28" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
+  }
   ch+=hatSVG(R.hat,P_,id,hair);
   ch+=weaponSVG(R.wp,P_,id,skin);
   if(R.shield)ch+=shieldSVG(P_,id);
   s+=flip?`<g transform="translate(100 0) scale(-1 1)">${ch}</g>`:ch;
+  if(c.tier>1)for(let k=0;k<(c.tier===3?7:4);k++){const x=(8+rn()*84).toFixed(1),y=(40+rn()*70).toFixed(1),r=(.6+rn()*1.1).toFixed(2);s+=`<path d="M${x} ${(+y-r*2.4).toFixed(2)} L${(+x+r*.6).toFixed(2)} ${y} L${x} ${(+y+r*2.4).toFixed(2)} L${(+x-r*.6).toFixed(2)} ${y}Z M${(+x-r*2.4).toFixed(2)} ${y} L${x} ${(+y+r*.6).toFixed(2)} L${(+x+r*2.4).toFixed(2)} ${y} L${x} ${(+y-r*.6).toFixed(2)}Z" fill="#fff" opacity=".75"/>`}
   if(c.core)s+=`<g transform="translate(50 30)"><path d="M0 -8 L6 0 L0 8 L-6 0Z" fill="#fff" opacity=".95"/><path d="M0 -8 L6 0 L0 8 L-6 0Z" fill="none" stroke="${P_.glow}" stroke-width="3" opacity=".35"/></g>`;
   s+=`<rect width="100" height="140" fill="url(#${id}v)"/></svg>`;
   ART[c.id]=s;return s;
@@ -892,7 +924,7 @@ function cardHTML(c,attrs,opt={}){
   const fi=focus();const p=P(fi);
   const can=opt.hl&&myTurn()&&canAfford(p,c);
   let fresh='';if(!UI.anim.has(c.id)){UI.anim.add(c.id);fresh=' fresh'}
-  const chips=C.filter(k=>c.cost[k]).map(k=>`<span class="chip k-${k}${p.bonus[k]>=c.cost[k]?' have':''}">${c.cost[k]}</span>`).join('');
+  const chips=C.filter(k=>c.cost[k]).map(k=>`<span class="chip k-${k}${p.bonus[k]>=c.cost[k]?' have':''}"><span>${c.cost[k]}</span></span>`).join('');
   return `<button class="card k-${c.color} t${c.tier}${can?' can':''}${fresh}" ${attrs} aria-label="${esc(c.name)}，${c.pts} 分，提供${CN[c.color]}">
    ${artSVG(c)}
    <div class="ctop"><span class="cpts">${c.pts||''}</span><span class="gem${c.core?' core':''}"></span></div>
@@ -920,7 +952,7 @@ function render(){
 
   const sel=UI.sel;const dbl=sel.length===2&&sel[0]===sel[1];
   const waitTxt=G.over?'遊戲已結束':NET.status?esc(NET.status):NET.busy?'同步中…':`等待 ${esc(P(G.cur).name)} 行動…`;
-  const bank=`<section class="panel bank"><h3 class="ptitle"><span>晶石庫</span><span>點選晶石後按「拿取」</span></h3>
+  const bank=`<section class="panel bank${myTurn()?' myturn':''}"><h3 class="ptitle"><span>晶石庫</span><span>點選晶石後按「拿取」</span></h3>
    <div class="tokens">${ALL.map(k=>{const cnt=sel.filter(x=>x===k).length;return `<div class="tokw"><button class="tok k-${k}${cnt?' sel':''}${G.bank[k]?'':' zero'}" data-act="tok" data-k="${k}" aria-label="${CN[k]} 剩 ${G.bank[k]}">${coinSVG(k,G.bank[k])}${cnt?`<span class="badge">×${cnt}</span>`:''}</button><span class="tlab">${CN[k]}</span></div>`}).join('')}</div>
    <div class="takebar">${myTurn()?`<span class="msg">${sel.length?(dbl?`拿 2 顆 ${CN[sel[0]]}`:`已選：${sel.map(k=>CN[k]).join('、')}`+(sel.length===1?(G.bank[sel[0]]>=4?`（再點一次${CN[sel[0]]}＝拿 2 顆同色）`:`（${CN[sel[0]]}剩 ${G.bank[sel[0]]} 顆，不足 4 顆不能拿 2 顆同色）`):'')):'點選晶石幣：3 顆不同色，或同一色點兩次拿 2 顆（庫存需 ≥4）'}${sel.length&&tokTotal(me)+sel.length>MAXTOK?' <span class="warn">・超過 10 顆需歸還</span>':''}</span>
      <button class="btn sm" data-act="clr" ${sel.length?'':'disabled'}>清除</button><button class="btn primary sm" data-act="take" ${sel.length?'':'disabled'}>拿取晶石</button>`:`<span class="msg">${waitTxt}</span>`}</div>
@@ -946,8 +978,10 @@ function render(){
       <span class="tc k-${k}${me.tokens[k]?'':' none'}">${me.tokens[k]}</span><span class="ll">${CS[k]}</span></div>`).join('')+
       `<div class="lc core"><span class="bd"><span>${me.core}</span></span><span class="tc" style="background:#2a2f5a;color:var(--brass2)">${me.icons}</span><span class="ll">核/徽</span></div>`;
   const resv=[0,1,2].map(i=>me.reserved[i]?cardHTML(me.reserved[i],`data-act="rcard" data-i="${i}" style="width:100%"`,{hl:1}):`<div class="slot"></div>`).join('');
-  const meP=`<section class="panel me">
-    <div class="mehead"><div><div class="sublab">${spectator?'觀戰中':G.cur===fi&&!G.over?'輪到你了':'你的陣營'}</div><div class="mename">${esc(me.name)}</div></div>
+  const mine=myTurn()||discard;
+  const meP=`<section class="panel me${mine?' myturn':''}">
+    ${mine?`<div class="turnflag"><span class="tf-dot"></span>${discard?'輪到你：請歸還多出的晶石':'輪到你了！選晶石、招募或保留一張卡'}</div>`:''}
+    <div class="mehead"><div><div class="sublab">${spectator?'觀戰中':'你的陣營'}</div><div class="mename">${esc(me.name)}</div></div>
       <div class="bigscore">${score(fi)}<small>分</small></div>
       <div class="goals">${goals.map(([d,t])=>`<span class="goal${d?' done':''}">${t}</span>`).join('')}</div></div>
     ${discard?`<div class="hintbox" style="margin:0 0 10px;border-color:var(--bad)">晶石超過 10 顆：點選下方紅框的晶石歸還，還需歸還 <b>${tokTotal(me)-MAXTOK}</b> 顆。</div>`:''}
@@ -971,17 +1005,34 @@ function render(){
      ${extras}
      ${tiers}
    </main>
+   ${bank}
    <div class="side">
+     ${meP}
      <section class="panel opp"><h3 class="ptitle"><span>${online?'其他玩家':'對手'}</span><span>◆折扣 ●晶石</span></h3><div class="plist">${opp}</div></section>
-     ${bank}
      <section class="panel logp"><h3 class="ptitle"><span>戰報</span></h3><div class="log">${G.log.map(l=>`<div>${l}</div>`).join('')}</div></section>
    </div>
-   ${meP}
   </div>`;
   UI.flash=false;
+  turnCue();
   renderOverlay();
 }
 
+let CUE_AC=null;
+function chime(){try{CUE_AC=CUE_AC||new (window.AudioContext||window.webkitAudioContext)();const ac=CUE_AC;if(ac.state==='suspended')ac.resume();const t=ac.currentTime;[[880,0],[1318.5,.12]].forEach(([f,d])=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t+d);g.gain.linearRampToValueAtTime(.12,t+d+.02);g.gain.exponentialRampToValueAtTime(.001,t+d+.45);o.connect(g).connect(ac.destination);o.start(t+d);o.stop(t+d+.5)})}catch(e){}}
+function turnCue(){
+  const mine=G&&!G.over&&(myTurn()||myDiscard());
+  const base='星晶守護者';const want=mine?'▶ 輪到你｜'+base:base;
+  if(document.title!==want)document.title=want;
+  if(!mine||UI.announced===G.turnId)return;
+  UI.announced=G.turnId;
+  const humans=G.players.filter(p=>p.type==='human').length;
+  const who=MODE==='local'&&humans>1?`輪到 ${esc(P(G.cur).name)}`:'輪到你了';
+  let b=document.getElementById('turnbanner');if(b)b.remove();
+  b=document.createElement('div');b.id='turnbanner';b.innerHTML=`<div class="tb-in"><small>第 ${G.round} 輪</small><b>${who}</b></div>`;
+  document.body.appendChild(b);setTimeout(()=>b.remove(),1900);
+  if(UI.interacted){chime();try{navigator.vibrate&&navigator.vibrate([60,40,60])}catch(e){}}
+}
+document.addEventListener('pointerdown',()=>{UI.interacted=true},{capture:true});
 function renderOverlay(){
   let ov=document.getElementById('ov');
   const html=overlayHTML();
@@ -994,7 +1045,7 @@ function renderOverlay(){
 function rulesHTML(){return `<div class="sheet"><h2>遊戲規則</h2><div class="sub">約 20–30 分鐘・2–4 人・可混搭真人與電腦</div><div class="rules">
     <h3>勝利條件</h3><ul><li>同時達成：<b>16 分以上</b>、<b>五色英雄卡各至少一張</b>、<b>至少一張星核卡</b>（第 III 階、上方有白色星核結晶的卡）。</li><li>有人達成後，打完這一輪（每人回合數相同）才結算。達成條件者中分數最高者獲勝；同分時招募卡較少者勝。</li></ul>
     <h3>每回合擇一行動</h3><ul><li>拿 3 顆<b>不同顏色</b>晶石。</li><li>拿 2 顆<b>同色</b>晶石（該色庫存需 ≥4）。</li><li><b>保留</b> 1 張場上的卡或牌堆頂的卡，並拿 1 顆<b>星塵</b>（萬用晶石）。最多保留 3 張。</li><li><b>招募</b> 1 張場上或保留區的卡，支付卡片左下的晶石。</li></ul>
-    <h3>折扣與限制</h3><ul><li>每張招募的英雄提供該色 1 點<b>永久折扣</b>（右上角的寶石）。</li><li>手上晶石上限 10 顆，超過必須歸還。</li><li>能負擔的卡會亮綠框；費用數字外加白圈表示你的折扣已足以抵掉這一色。</li></ul>
+    <h3>折扣與限制</h3><ul><li>每張招募的英雄提供該色 1 點<b>永久折扣</b>（右上角的寶石）。</li><li>手上晶石上限 10 顆，超過必須歸還。</li><li>能負擔的卡會亮綠框；費用變成<b>菱形</b>表示你的折扣已足以抵掉這一色，不用花晶石。</li></ul>
     <h3>據點與星盟之證</h3><ul><li><b>據點</b>：回合結束時折扣達到需求即自動解放，+3 分（每回合最多一個）。</li><li><b>星盟之證</b>：最先擁有 ${ALLY_MIN} 枚★徽章者取得，+3 分；之後若有人徽章數<b>超過</b>持有者就會被奪走。</li></ul>
     <h3>線上對戰</h3><ul><li>在「線上對戰」建立房間，把 4 碼房號或邀請連結傳給朋友即可加入；房主可把空位設成電腦。</li><li>玩家之間直接連線，房主的頁面就是主機：房主請保持頁面開著，不要關閉或切走太久。</li><li>有人斷線時，輪到他時可按「改由電腦代打」；斷線的人重新打開連結會自動回到座位。</li></ul>
     </div><div class="acts"><button class="btn primary" data-act="closerules">知道了</button></div></div>`}
