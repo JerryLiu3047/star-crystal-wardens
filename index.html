@@ -1,0 +1,1172 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0e20">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%23c8a35a%22/%3E%3Cpath d=%22M32 12l12 20-12 20-12-20z%22 fill=%22%23a062e8%22/%3E%3C/svg%3E">
+<style>html,body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>星晶守護者</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&family=Oxanium:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --ink:#0c0e20;--ink2:#12152c;--panel:#161a36;--panel2:#1d2245;--line:#2d3361;--line2:#414a85;
+  --text:#ece9f8;--muted:#a3a1c7;--dim:#6f6d98;
+  --brass:#c8a35a;--brass2:#ecd49a;
+  --r:#e5533f;--u:#3b87ea;--g:#2db46e;--y:#eab935;--p:#a062e8;--w:#e3e8f4;--c:#ff8a4c;
+  --ok:#5fd39a;--bad:#ff7a6b;
+  --fd:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --fb:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --fn:"Oxanium","Noto Sans TC",ui-monospace,monospace;
+}
+html,body{height:auto;background:var(--ink);color:var(--text)}
+body{font-family:var(--fb);font-size:14px;line-height:1.5;
+  background:
+   radial-gradient(1100px 560px at 75% -8%,#2b2462 0%,transparent 60%),
+   radial-gradient(900px 520px at -12% 108%,#16345a 0%,transparent 55%),
+   var(--ink);background-attachment:fixed;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.55;
+  background-image:radial-gradient(1px 1px at 12% 18%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 68% 32%,#fff6 50%,transparent 51%),radial-gradient(1.2px 1.2px at 38% 72%,#fff7 50%,transparent 51%),radial-gradient(1px 1px at 88% 82%,#fff5 50%,transparent 51%),radial-gradient(1px 1px at 52% 8%,#fff6 50%,transparent 51%),radial-gradient(1px 1px at 22% 56%,#fff4 50%,transparent 51%);
+  background-size:340px 300px}
+button{font:inherit;color:inherit;touch-action:manipulation}
+html{touch-action:manipulation}
+.tok,.tokw,.card,.deck{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--brass2);outline-offset:2px}
+
+.k-r{--gc:var(--r)}.k-u{--gc:var(--u)}.k-g{--gc:var(--g)}.k-y{--gc:var(--y)}.k-p{--gc:var(--p)}.k-w{--gc:var(--w)}.k-c{--gc:var(--c)}
+
+.app{position:relative;max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:12px 40px;display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;margin-right:auto}
+.brand h1{margin:0;font-family:var(--fd);font-weight:900;font-size:24px;letter-spacing:.12em;background:linear-gradient(180deg,#fff 10%,var(--brass2) 60%,var(--brass));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.15}
+.brand small{color:var(--muted);font-size:11.5px;letter-spacing:.18em}
+.turninfo{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.turninfo b{color:var(--text);font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;border:1px solid var(--line2);background:var(--panel)}
+.btn{border:1px solid var(--line2);background:var(--panel2);border-radius:8px;padding:7px 13px;cursor:pointer;font-size:13.5px;font-weight:500;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--brass);background:#262c57}
+.btn.primary{background:linear-gradient(180deg,#e9cf8f,#b98f42);color:#1b1530;border-color:#e9cf8f;font-weight:700}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.4;cursor:not-allowed;filter:none}
+.btn.sm{padding:5px 10px;font-size:12.5px}
+
+.board{grid-area:auto;display:flex;flex-direction:column;gap:10px;min-width:0}
+.panel{background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-radius:14px;padding:12px}
+.ptitle{font-size:11.5px;letter-spacing:.2em;color:var(--muted);margin:0 0 8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+.toast{min-height:34px;display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:10px;background:#0f1230;border:1px dashed var(--line2);font-size:13px;color:var(--muted)}
+.toast b{color:var(--text)}
+.toast.flash{animation:flash .6s ease}
+@keyframes flash{from{background:#2a2a5a}to{background:#0f1230}}
+
+.extras{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:6px}
+.loc .lsub svg{width:11px;height:11px;fill:var(--brass2);vertical-align:-1px}
+@media (max-width:620px){.extras{grid-template-columns:repeat(var(--m),minmax(0,1fr))}}
+.loc{position:relative;border-radius:10px;padding:7px 8px 8px;background:linear-gradient(180deg,#232a52,#181c3b);border:1px solid var(--line2);min-height:74px;display:flex;flex-direction:column;gap:5px;overflow:hidden}
+.loc .lname{font-family:var(--fd);font-weight:700;font-size:12.5px;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:18px}
+.loc .lpts{position:absolute;top:5px;right:7px;font-family:var(--fn);font-weight:700;font-size:16px;color:var(--brass2)}
+.loc .req{display:flex;gap:3px;flex-wrap:wrap;margin-top:auto}
+.rq{display:inline-grid;place-items:center;width:20px;height:24px;font-family:var(--fn);font-weight:700;font-size:12px;color:#fff;text-shadow:0 1px 1px #000a;border-radius:4px;background:linear-gradient(160deg,color-mix(in srgb,var(--gc) 70%,white) 0%,var(--gc) 40%,color-mix(in srgb,var(--gc) 55%,black))}
+.k-y.rq,.k-w.rq{color:#1b1a2e;text-shadow:none}
+.loc.ally{background:linear-gradient(180deg,#3a2f22,#1f1a26);border-color:#7a6236}
+.loc.ally .lname{color:var(--brass2)}
+.loc .lsub{font-size:11px;color:var(--muted);line-height:1.3}
+.loc.gone{opacity:.35}
+
+.tier{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.deck{position:relative;aspect-ratio:5/7;border-radius:9px;border:1px solid var(--line2);cursor:pointer;padding:0;overflow:hidden;
+  background:repeating-linear-gradient(45deg,#1a1f44 0 6px,#161a39 6px 12px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;container-type:inline-size}
+.deck::before{content:"";position:absolute;inset:7%;border:1px solid color-mix(in srgb,var(--brass) 55%,transparent);border-radius:6px}
+.deck .roman{font-family:var(--fd);font-weight:900;font-size:26cqw;color:var(--brass2);letter-spacing:.05em}
+.deck .cnt{font-family:var(--fn);font-size:14cqw;color:var(--muted)}
+.deck.empty{opacity:.35;cursor:default}
+.slot{aspect-ratio:5/7;border-radius:9px;border:1px dashed var(--line)}
+
+.card{position:relative;container-type:inline-size;isolation:isolate;aspect-ratio:5/7;width:100%;border-radius:9px;padding:0;cursor:pointer;overflow:hidden;text-align:left;display:block;
+  border:1px solid color-mix(in srgb,var(--gc) 60%,transparent);
+  background:linear-gradient(165deg,color-mix(in srgb,var(--gc) 44%,#141733) 0%,#141733 60%,#0e1027 100%);
+  box-shadow:0 3px 10px #0006;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-2px)}
+.card.t3{border-color:color-mix(in srgb,var(--brass) 80%,transparent);box-shadow:0 3px 10px #0006,inset 0 0 0 1px #0000,inset 0 0 18px -6px var(--brass)}
+.card.can{box-shadow:0 0 0 2px var(--ok),0 0 16px -3px var(--ok)}
+.card.fresh{animation:deal .5s cubic-bezier(.2,.8,.3,1.2)}
+@keyframes deal{from{transform:translateY(-14px) scale(.9);opacity:0}to{transform:none;opacity:1}}
+.ctop,.cicons,.ccost,.cname{z-index:1}
+.ctop{position:absolute;left:8cqw;right:8cqw;top:6cqw;display:flex;justify-content:space-between;align-items:flex-start}
+.cpts{font-family:var(--fn);font-weight:700;font-size:32cqw;line-height:.95;text-shadow:0 2px 0 #0009;min-height:30cqw}
+.gem{position:relative;width:20cqw;aspect-ratio:1;margin:5cqw 4cqw 0 0;transform:rotate(45deg);border-radius:2px;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--gc) 45%,white) 0%,var(--gc) 45%,color-mix(in srgb,var(--gc) 55%,black) 100%);box-shadow:0 0 0 1px #0006}
+.gem.core{box-shadow:0 0 0 2cqw #0e1027,0 0 0 3.6cqw #fff,0 0 12cqw 2cqw var(--c)}
+.cicons{position:absolute;left:8cqw;top:44cqw;display:flex;gap:2cqw}
+.cicons svg{width:14cqw;height:14cqw;fill:var(--brass2);filter:drop-shadow(0 1px 0 #0008)}
+.cimg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cname{position:absolute;right:6cqw;bottom:5cqw;left:36cqw;text-align:right;font-family:var(--fd);font-weight:700;font-size:10.5cqw;letter-spacing:.06em;color:#fff;text-shadow:0 1px 3px #000,0 0 6px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@container (max-width:88px){.cname{display:none}}
+.ccost{position:absolute;left:7cqw;bottom:6cqw;display:flex;flex-direction:column-reverse;gap:2.5cqw}
+.chip{width:22cqw;height:22cqw;border-radius:50%;display:grid;place-items:center;font-family:var(--fn);font-weight:700;font-size:14cqw;line-height:1;color:#fff;text-shadow:0 1px 1px #000b;
+  background:radial-gradient(circle at 38% 34%,color-mix(in srgb,var(--gc) 55%,white),var(--gc) 55%,color-mix(in srgb,var(--gc) 55%,black));box-shadow:0 0 0 1px #0008}
+.k-y.chip,.k-w.chip{color:#1b1a2e;text-shadow:none}
+.chip.have{box-shadow:0 0 0 1px #0008,0 0 0 2.4cqw #ffffffb0}
+
+.side{display:contents}
+.bank{order:3}
+.opp{order:1}
+.board{order:2}
+.me{order:4}
+.logp{order:5}
+
+.tokens{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;justify-items:center}
+.tokw{display:flex;flex-direction:column;align-items:center;gap:4px}
+.tok{position:relative;width:54px;height:60px;border:none;padding:0;background:none;cursor:pointer;transition:transform .15s,filter .15s;filter:drop-shadow(0 4px 6px #0008)}
+.tok svg{width:100%;height:100%;display:block;overflow:visible}
+.tok:hover{transform:translateY(-2px)}
+.tok.sel{transform:translateY(-6px);filter:drop-shadow(0 0 7px var(--brass2)) drop-shadow(0 8px 8px #000a)}
+.tok.zero{opacity:.35}
+.tok .badge{position:absolute;top:-8px;right:-12px;min-width:20px;height:20px;border-radius:10px;background:var(--brass2);color:#1b1530;font-family:var(--fn);font-weight:700;font-size:12px;display:grid;place-items:center;padding:0 5px;z-index:2;box-shadow:0 2px 4px #0008}
+.tlab{font-size:11px;color:var(--muted);letter-spacing:.08em}
+.takebar{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;min-height:34px}
+.takebar .msg{font-size:12.5px;color:var(--muted);margin-right:auto}
+
+.plist{display:flex;flex-direction:column;gap:8px}
+.pc{border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:#12162f}
+.pc.cur{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass) inset}
+.pc .ph{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.pc .pname{font-weight:700;font-size:13.5px}
+.pc .ptag{font-size:11px;color:var(--muted)}
+.pc .pscore{margin-left:auto;font-family:var(--fn);font-weight:700;font-size:20px;color:var(--brass2)}
+.mini{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) auto;gap:4px;align-items:center}
+.mc{display:flex;flex-direction:column;align-items:center;gap:2px}
+.md{width:14px;height:14px;transform:rotate(45deg);border-radius:2px;background:linear-gradient(135deg,color-mix(in srgb,var(--gc) 45%,white),var(--gc) 45%,color-mix(in srgb,var(--gc) 55%,black));display:grid;place-items:center}
+.md.none{opacity:.25}
+.mc .v{font-family:var(--fn);font-size:12px;line-height:1.1}
+.mc .v.tk{color:var(--muted)}
+.meta{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin-top:6px}
+.meta b{color:var(--text);font-family:var(--fn)}
+.thinking{font-size:11px;color:var(--brass2);animation:pulse 1s infinite alternate}
+@keyframes pulse{from{opacity:.4}to{opacity:1}}
+
+.me .mehead{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.me .mename{font-family:var(--fd);font-weight:900;font-size:18px;letter-spacing:.08em}
+.me .bigscore{font-family:var(--fn);font-weight:700;font-size:34px;line-height:1;color:var(--brass2)}
+.me .bigscore small{font-size:14px;color:var(--muted);margin-left:2px}
+.goals{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.goal{font-size:11.5px;padding:3px 8px;border-radius:99px;border:1px solid var(--line2);color:var(--muted)}
+.goal.done{border-color:var(--ok);color:var(--ok)}
+.ledger{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.lc{display:flex;flex-direction:column;align-items:center;gap:5px;padding:7px 2px;border-radius:10px;background:#11152d;border:1px solid var(--line)}
+.lc .bd{width:24px;height:24px;transform:rotate(45deg);border-radius:3px;display:grid;place-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--gc) 45%,white),var(--gc) 45%,color-mix(in srgb,var(--gc) 55%,black))}
+.lc .bd span{transform:rotate(-45deg);font-family:var(--fn);font-weight:700;font-size:13px;color:#fff;text-shadow:0 1px 1px #000a}
+.k-y.bd span,.k-w.bd span{color:#1b1a2e;text-shadow:none}
+.lc .tc{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--fn);font-weight:700;font-size:13px;color:#fff;text-shadow:0 1px 1px #000a;background:radial-gradient(circle at 38% 32%,color-mix(in srgb,var(--gc) 50%,white),var(--gc) 58%,color-mix(in srgb,var(--gc) 55%,black));box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--gc) 50%,black),inset 0 0 0 3.5px #ffffff55,inset 0 0 0 5px color-mix(in srgb,var(--gc) 70%,black),0 2px 0 color-mix(in srgb,var(--gc) 45%,black),0 3px 3px #0007}
+.k-y.tc,.k-w.tc{color:#1b1a2e;text-shadow:none}
+.lc .none{opacity:.28}
+.lc .ll{font-size:10.5px;color:var(--muted);letter-spacing:.05em}
+.lc.core .bd{background:conic-gradient(from 45deg,#ff6b6b,#ffd166,#6ee7a8,#63b3ff,#c38bff,#ff6b6b)}
+.lc.btn-ret{cursor:pointer;border-color:var(--bad)}
+.merow{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;align-items:flex-start}
+.resv{display:grid;grid-template-columns:repeat(3,72px);gap:7px}
+.resv .slot{width:72px}
+.mebtns{display:flex;gap:8px;margin-left:auto;align-items:flex-end;flex-wrap:wrap}
+.sublab{font-size:11px;color:var(--muted);letter-spacing:.15em;margin-bottom:5px}
+.hintbox{margin-top:10px;font-size:13px;padding:8px 10px;border-radius:9px;background:#221f3f;border:1px solid #5b4b8a}
+
+.log{max-height:220px;overflow:auto;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px;padding-right:4px}
+.log div b{color:var(--text);font-weight:500}
+
+.ov{position:fixed;inset:0;z-index:50;background:#070816cc;backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px;overflow:auto}
+.sheet{width:min(460px,100%);background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:18px;box-shadow:0 20px 60px #000a;max-height:calc(100% - 20px);overflow:auto}
+.sheet h2{margin:0 0 4px;font-family:var(--fd);font-weight:900;font-size:21px;letter-spacing:.08em}
+.sheet .sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
+.sheet .row{display:flex;gap:16px;align-items:flex-start}
+.sheet .big{width:150px;flex:none}
+.sheet .info{font-size:13px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sheet .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.pay{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.pay .rq{width:auto;padding:0 6px;height:22px}
+.warn{color:var(--bad)}
+.good{color:var(--ok)}
+@media (max-width:420px){.sheet .row{flex-direction:column;align-items:center}.sheet .big{width:140px}}
+
+.setup{width:min(520px,100%)}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:none;background:transparent;padding:7px 16px;cursor:pointer;font-family:var(--fn);font-weight:700}
+.seg button.on{background:var(--brass);color:#1b1530}
+.seat{display:grid;grid-template-columns:28px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;margin-top:8px}
+.seat .no{font-family:var(--fn);color:var(--brass2);font-weight:700;text-align:center}
+.seat input,.seat select{width:100%;box-sizing:border-box;background:#0f1230;border:1px solid var(--line2);border-radius:8px;padding:8px 9px;color:var(--text);font:inherit;font-size:13.5px}
+.rules{font-size:13.5px;line-height:1.7}
+.rules h3{font-family:var(--fd);font-size:15px;margin:14px 0 4px;color:var(--brass2);letter-spacing:.08em}
+.rules ul{margin:0;padding-left:20px}
+.rank{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.rank .ri{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:#12162f;border:1px solid var(--line)}
+.rank .ri.win{border-color:var(--brass);background:linear-gradient(90deg,#3a2f22,#12162f)}
+.rank .pos{font-family:var(--fn);font-weight:700;font-size:18px;width:22px;color:var(--brass2)}
+.rank .sc{margin-left:auto;font-family:var(--fn);font-weight:700;font-size:20px}
+
+
+.tabs{display:flex;gap:4px;margin:4px 0 14px;border-bottom:1px solid var(--line)}
+.tabs button{border:none;background:none;padding:8px 14px;cursor:pointer;color:var(--muted);font-weight:700;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--brass2);border-bottom-color:var(--brass2)}
+.fld{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.fld input{flex:1;min-width:0;box-sizing:border-box;background:#0f1230;border:1px solid var(--line2);border-radius:8px;padding:8px 10px;color:var(--text);font:inherit;font-size:14px}
+.fld input.code{font-family:var(--fn);font-weight:700;letter-spacing:.3em;text-transform:uppercase;max-width:150px}
+.grp{margin-top:16px}
+.rooms{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.roomrow{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:#12162f;border:1px solid var(--line);font-size:13px}
+.roomrow .rc{font-family:var(--fn);font-weight:700;letter-spacing:.15em;color:var(--brass2)}
+.roomrow .rm{color:var(--muted);margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.note{font-size:12.5px;color:var(--muted);line-height:1.6}
+.errmsg{font-size:12.5px;color:var(--bad);margin-top:8px}
+.bigcode{font-family:var(--fn);font-weight:700;font-size:40px;letter-spacing:.25em;color:var(--brass2);line-height:1}
+.lseat{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:#12162f;border:1px solid var(--line);margin-top:6px;font-size:13.5px}
+.lseat .no{font-family:var(--fn);color:var(--brass2);font-weight:700;width:16px}
+.lseat .nm{margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lseat select{background:#0f1230;border:1px solid var(--line2);border-radius:7px;padding:5px 6px;color:var(--text);font:inherit;font-size:12.5px}
+.tagx{font-size:10.5px;padding:1px 7px;border-radius:99px;border:1px solid var(--line2);color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.on{background:var(--ok);box-shadow:0 0 6px var(--ok)}
+.pill.net{border-color:#3f6f8a;color:#9fdcff}
+
+@media (min-width:980px){
+  .app{grid-template-columns:minmax(0,660px) minmax(290px,1fr);grid-template-areas:"top top" "board side" "me side";align-items:start}
+  .top{grid-area:top}
+  .board{grid-area:board}
+  .me{grid-area:me}
+  .side{display:flex;flex-direction:column;gap:14px;grid-area:side;position:sticky;top:12px}
+  .log{max-height:300px}
+}
+@media (max-width:520px){
+  .tok{width:48px;height:54px}
+  .tier{gap:5px}
+  .brand h1{font-size:21px}
+  .ledger{gap:4px}
+  .resv{grid-template-columns:repeat(3,64px)}.resv .slot{width:64px}
+  .mebtns{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js"></script>
+<script>window.Peer||document.write('<script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"><\/script>')</script>
+
+
+<script>
+(()=>{
+const C=['r','u','g','y','p'];
+const ALL=['r','u','g','y','p','w'];
+const CN={r:'焰晶',u:'潮晶',g:'森晶',y:'雷晶',p:'影晶',w:'星塵',c:'星核'};
+const CS={r:'焰',u:'潮',g:'森',y:'雷',p:'影',w:'塵'};
+const TITLE={r:'赤焰',u:'蒼潮',g:'翠森',y:'金雷',p:'紫影'};
+const WIN=16, ALLY_MIN=3, MAXTOK=10, MAXRES=3;
+const ROMAN={1:'I',2:'II',3:'III'};
+const STAR='<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>';
+
+const PAT={
+ 1:[[0,{o0:1,o1:1,o2:1,o3:1},1,0,'哨兵'],[0,{o0:1,o1:2,o2:1,o3:1},0,0,'斥候'],[0,{o1:2,o2:2,o3:1},0,0,'學徒'],[0,{own:1,o0:3,o1:1},0,0,'弓手'],
+    [0,{o0:2,o1:1},0,0,'鐵衛'],[0,{o0:2,o2:2},0,0,'信使'],[0,{o0:3},1,0,'獵人'],[1,{o1:4},0,0,'劍士']],
+ 2:[[1,{o0:2,o1:2,o2:3},1,0,'騎士'],[1,{own:2,o0:2,o1:3},0,0,'術士'],[2,{o0:1,o1:4,o2:2},1,0,'遊俠'],[2,{o0:5,o1:3},0,0,'機匠'],
+    [2,{o2:5},0,0,'先知'],[3,{own:6},2,0,'劍聖']],
+ 3:[[3,{o0:3,o1:3,o2:5,o3:3},1,1,'君主'],[4,{o0:7},2,0,'戰神'],[4,{own:3,o0:6,o1:3},0,1,'賢者'],[5,{own:3,o0:7},1,0,'守護神']]
+};
+const LOCS=[
+ ['浮空港',{r:4,u:4}],['翡翠湖',{g:4,y:4}],['熔火鍛爐',{p:4,r:4}],['深海神殿',{u:4,g:4}],['雷鳴峽谷',{y:4,p:4}],
+ ['星辰觀測台',{r:3,u:3,g:3}],['霧森祭壇',{u:3,g:3,y:3}],['古都遺跡',{g:3,y:3,p:3}],['黑曜要塞',{y:3,p:3,r:3}],['影月塔',{p:3,r:3,u:3}]
+];
+
+// ================= card illustrations =================
+const PAL={
+ r:{s1:'#240710',s2:'#b3391f',cloth:'#b83a28',dark:'#4e120e',glow:'#ffb35c',land:'#1a0507'},
+ u:{s1:'#04162e',s2:'#1f6fb3',cloth:'#2c6fc4',dark:'#0e2a57',glow:'#8fe3ff',land:'#06284d'},
+ g:{s1:'#06201a',s2:'#2e7a4a',cloth:'#2f8c55',dark:'#113a25',glow:'#c4ff9a',land:'#0a2a1a'},
+ y:{s1:'#16142a',s2:'#7a6428',cloth:'#c79a2a',dark:'#4a380f',glow:'#fff27a',land:'#1d1a2e'},
+ p:{s1:'#0d0720',s2:'#4d2c80',cloth:'#6e3fb0',dark:'#28144d',glow:'#e3b8ff',land:'#130a28'}
+};
+const SKIN=['#f3d0b0','#e6b48a','#c98d62','#9a6440','#f6dcc6','#d9a27a'];
+const HAIR=['#2a1c15','#5e3519','#b8873c','#e9e4d6','#7b2331','#26386b','#1c1c1c'];
+const ROLE={
+ 哨兵:{hat:'helmet',wp:'spear',armor:1}, 斥候:{hat:'hood',wp:'dagger'}, 學徒:{hat:'wizard',wp:'staff'}, 弓手:{hat:'feather',wp:'bow'},
+ 鐵衛:{hat:'helmet',wp:'shield',armor:1}, 信使:{hat:'feather',wp:'orb',wings:1}, 獵人:{hat:'hood',wp:'spear'}, 劍士:{hat:'band',wp:'sword',hair:'long'},
+ 騎士:{hat:'plume',wp:'sword',armor:1,shield:1}, 術士:{hat:'wizard',wp:'orb'}, 遊俠:{hat:'hood',wp:'bow'}, 機匠:{hat:'goggles',wp:'gear'},
+ 先知:{hat:'halo',wp:'orb',eyes:'glow'}, 劍聖:{hat:'band',wp:'sword',hair:'long',cape:1},
+ 君主:{hat:'crown',wp:'sword',armor:1,cape:1}, 戰神:{hat:'horns',wp:'axe',armor:1,cape:1}, 賢者:{hat:'halo',wp:'staff',hair:'long',beard:1}, 守護神:{hat:'halo',wp:'spear',armor:1,wings:1}
+};
+function rng(seed){let s=(seed*2654435761)%4294967296;return()=>{s=(s*1664525+1013904223)%4294967296;return s/4294967296}}
+function scene(col,rn,P_){
+  let s='';
+  if(col==='r'){
+    s+=`<path d="M0 104 L18 80 L28 86 L40 64 L48 68 L55 63 L70 86 L84 76 L100 90 L100 140 L0 140Z" fill="${P_.land}" opacity=".9"/>`;
+    s+=`<path d="M47 66 Q44 84 49 100" stroke="#ff7a2e" stroke-width="1.6" fill="none" opacity=".85"/><ellipse cx="48" cy="64" rx="7" ry="3" fill="#ff8a3c" opacity=".7"/>`;
+    for(let i=0;i<12;i++)s+=`<circle cx="${(rn()*100).toFixed(1)}" cy="${(rn()*80+4).toFixed(1)}" r="${(rn()*.9+.3).toFixed(2)}" fill="#ffc07a" opacity="${(rn()*.6+.3).toFixed(2)}"/>`;
+  }else if(col==='u'){
+    for(let k=0;k<3;k++){const y=78+k*12;s+=`<path d="M0 ${y} Q12 ${y-6} 25 ${y} T50 ${y} T75 ${y} T100 ${y} V140 H0Z" fill="${['#0b3f78','#082f5c','#051f40'][k]}" opacity=".85"/>`}
+    for(let i=0;i<9;i++)s+=`<circle cx="${(rn()*100).toFixed(1)}" cy="${(rn()*70+8).toFixed(1)}" r="${(rn()*2+.8).toFixed(2)}" fill="none" stroke="#bfefff" stroke-width=".5" opacity=".6"/>`;
+  }else if(col==='g'){
+    for(let i=0;i<9;i++){const x=rn()*100,h=26+rn()*34,w=7+rn()*6,b=104+rn()*10;s+=`<path d="M${(x-w).toFixed(1)} ${b.toFixed(1)} L${x.toFixed(1)} ${(b-h).toFixed(1)} L${(x+w).toFixed(1)} ${b.toFixed(1)} Z" fill="${i%2?'#0c3322':'#092a1b'}"/>`}
+    s+=`<rect x="0" y="108" width="100" height="32" fill="${P_.land}"/>`;
+    for(let i=0;i<10;i++)s+=`<circle cx="${(rn()*100).toFixed(1)}" cy="${(rn()*90+10).toFixed(1)}" r="${(rn()*.8+.4).toFixed(2)}" fill="#e6ff9a" opacity="${(rn()*.5+.4).toFixed(2)}"/>`;
+  }else if(col==='y'){
+    for(let i=0;i<5;i++)s+=`<ellipse cx="${(rn()*100).toFixed(1)}" cy="${(rn()*20+6).toFixed(1)}" rx="${(18+rn()*14).toFixed(1)}" ry="${(6+rn()*4).toFixed(1)}" fill="#2a2640" opacity=".85"/>`;
+    const x=rn()<.5?14+rn()*14:66+rn()*18;
+    s+=`<path d="M${x} 10 L${x-9} 36 L${x-2} 36 L${x-11} 62 L${x+9} 30 L${x+1} 30 L${x+8} 10 Z" fill="#fff27a" opacity=".95"/><path d="M${x} 10 L${x-9} 36 L${x-2} 36 L${x-11} 62 L${x+9} 30 L${x+1} 30 L${x+8} 10 Z" fill="none" stroke="#fff27a" stroke-width="4" opacity=".25"/>`;
+    s+=`<path d="M0 110 L20 96 L38 104 L60 92 L80 102 L100 94 V140 H0Z" fill="${P_.land}"/>`;
+  }else{
+    {const mx=rn()<.5?22:78;s+=`<circle cx="${mx}" cy="46" r="14" fill="#efe6ff" opacity=".9"/><circle cx="${mx}" cy="46" r="21" fill="#efe6ff" opacity=".08"/>`;}
+    for(let i=0;i<16;i++)s+=`<circle cx="${(rn()*100).toFixed(1)}" cy="${(rn()*90).toFixed(1)}" r="${(rn()*.7+.25).toFixed(2)}" fill="#fff" opacity="${(rn()*.6+.3).toFixed(2)}"/>`;
+    s+=`<path d="M0 112 L14 100 L14 84 L20 80 L26 84 L26 100 L40 108 L62 104 L78 90 L78 72 L84 66 L90 72 L90 96 L100 100 V140 H0Z" fill="${P_.land}"/>`;
+  }
+  return s;
+}
+function hatSVG(h,P_,id,hair){
+  const M=`url(#${id}m)`,GO=`url(#${id}go)`;
+  switch(h){
+    case 'helmet':return `<path d="M37 72 Q36 54 50 54 Q64 54 63 72 L60 72 L60 67 L40 67 L40 72 Z" fill="${M}"/><rect x="48.6" y="62" width="2.8" height="12" fill="${M}"/>`;
+    case 'plume':return `<path d="M50 55 Q56 38 72 40 Q62 44 58 57 Z" fill="${P_.cloth}"/><path d="M37 72 Q36 54 50 54 Q64 54 63 72 L60 72 L60 67 L40 67 L40 72 Z" fill="${M}"/><rect x="48.6" y="62" width="2.8" height="12" fill="${M}"/>`;
+    case 'horns':return `<path d="M38 62 Q25 60 23 42 Q31 54 41 57 Z" fill="#eadfc4"/><path d="M62 62 Q75 60 77 42 Q69 54 59 57 Z" fill="#eadfc4"/><path d="M37 72 Q36 54 50 54 Q64 54 63 72 L60 72 L60 67 L40 67 L40 72 Z" fill="${M}"/><rect x="48.6" y="62" width="2.8" height="12" fill="${GO}"/>`;
+    case 'hood':return `<path fill-rule="evenodd" d="M29 98 Q27 55 50 49 Q73 55 71 98 Q62 89 50 89 Q38 89 29 98 Z M50 58 Q39 59 39 72 Q40 84 50 85 Q60 84 61 72 Q61 59 50 58 Z" fill="${P_.dark}"/><path d="M39 71 Q40 58 50 58 Q60 58 61 71 Q56 64 50 64 Q44 64 39 71Z" fill="#000" opacity=".4"/>`;
+    case 'wizard':return `<path d="M36 62 L55 24 Q59 22 58.5 28 L64 62 Z" fill="${P_.cloth}"/><path d="M36 62 L55 24 L50 62Z" fill="#000" opacity=".18"/><ellipse cx="50" cy="62" rx="19" ry="4.2" fill="${P_.dark}"/><path d="M39 56.5 L62 56.5 L62.8 60.5 L37.5 60.5Z" fill="${P_.glow}" opacity=".75"/>`;
+    case 'feather':return `<path d="M37 64 Q38 53 51 53 Q63 54 64 64 Q50 60 37 64 Z" fill="${P_.dark}"/><path d="M58 56 Q70 44 79 33 Q75 48 62 58 Z" fill="${P_.glow}"/><path d="M60 57 Q70 46 78 35" stroke="#fff" stroke-width=".4" fill="none" opacity=".7"/>`;
+    case 'crown':return `<path d="M38 60 L37 47 L43 53 L46 43 L50 52 L54 43 L57 53 L63 47 L62 60 Z" fill="${GO}"/><circle cx="50" cy="56.5" r="1.9" fill="${P_.glow}"/><circle cx="42" cy="57" r="1.1" fill="#fff" opacity=".8"/><circle cx="58" cy="57" r="1.1" fill="#fff" opacity=".8"/>`;
+    case 'goggles':return `<rect x="37" y="61" width="26" height="4" rx="2" fill="#3a2a1c"/><circle cx="44" cy="63" r="4.6" fill="${P_.glow}" stroke="${GO}" stroke-width="1.6"/><circle cx="56" cy="63" r="4.6" fill="${P_.glow}" stroke="${GO}" stroke-width="1.6"/><circle cx="42.8" cy="61.8" r="1.2" fill="#fff"/><circle cx="54.8" cy="61.8" r="1.2" fill="#fff"/>`;
+    case 'halo':return `<ellipse cx="50" cy="50" rx="15" ry="3.8" fill="none" stroke="${P_.glow}" stroke-width="5" opacity=".25"/><ellipse cx="50" cy="50" rx="14" ry="3.4" fill="none" stroke="${GO}" stroke-width="1.8"/>`;
+    case 'band':return `<rect x="38.5" y="60" width="23" height="3" fill="${P_.cloth}"/><path d="M61 61 Q70 62 75 71" stroke="${P_.cloth}" stroke-width="2" fill="none"/>`;
+  }
+  return '';
+}
+function weaponSVG(w,P_,id,skin){
+  const M=`url(#${id}m)`,GO=`url(#${id}go)`,A=`url(#${id}a)`;
+  const hand=(x,y)=>`<circle cx="${x}" cy="${y}" r="4" fill="${skin}"/>`;
+  switch(w){
+    case 'sword':return `<path d="M73 118 L77 118 L78 54 L75 44 L72 54 Z" fill="${M}"/><path d="M75 48 L75 116" stroke="${P_.glow}" stroke-width=".7" opacity=".9"/><rect x="67" y="116" width="16" height="3" rx="1" fill="${GO}"/><rect x="73.5" y="119" width="3" height="10" fill="#4a2d18"/>${hand(75,123)}`;
+    case 'dagger':return `<path d="M73 118 L77 118 L77 96 L75 90 L73 96 Z" fill="${M}"/><rect x="69" y="116" width="12" height="2.6" rx="1" fill="${GO}"/>${hand(75,122)}`;
+    case 'spear':return `<path d="M77 140 L80 44" stroke="#5a3a1e" stroke-width="2.6"/><path d="M80.4 28 L85 44 L80.4 49 L76 44 Z" fill="${M}"/><path d="M78 50 Q74 54 76 58" stroke="${P_.glow}" stroke-width="1.5" fill="none"/>${hand(78,112)}`;
+    case 'axe':return `<path d="M77 140 L79 46" stroke="#5a3a1e" stroke-width="3"/><path d="M79 50 Q96 52 94 74 Q87 64 79 67 Z" fill="${M}"/><path d="M79 52 Q70 56 71 64 Q74 60 79 60Z" fill="${M}"/><path d="M93 60 Q94 66 93 72" stroke="${P_.glow}" stroke-width=".8" fill="none"/>${hand(78,114)}`;
+    case 'bow':return `<path d="M27 42 Q3 90 27 138" stroke="#6b4423" stroke-width="3.2" fill="none"/><path d="M27 42 L27 138" stroke="#efe6d2" stroke-width=".6"/><path d="M27 90 L62 88" stroke="#d8c29a" stroke-width="1.3"/><path d="M63 88 L57 85.5 L57.5 90.8Z" fill="${M}"/>${hand(24,90)}${hand(60,99)}`;
+    case 'staff':return `<path d="M76 140 L76 50" stroke="#5a3a1e" stroke-width="3"/><circle cx="76" cy="43" r="12" fill="${A}"/><circle cx="76" cy="43" r="5.2" fill="${P_.glow}"/><circle cx="74.5" cy="41.5" r="1.6" fill="#fff"/><path d="M69 50 Q76 36 83 50" stroke="${GO}" stroke-width="1.6" fill="none"/>${hand(76,116)}`;
+    case 'orb':return `<circle cx="50" cy="116" r="17" fill="${A}"/><circle cx="50" cy="116" r="7" fill="${P_.glow}"/><circle cx="47.5" cy="113.5" r="2.2" fill="#fff" opacity=".85"/>${hand(41,124)}${hand(59,124)}`;
+    case 'gear':return `<circle cx="76" cy="110" r="9" fill="none" stroke="${GO}" stroke-width="5" stroke-dasharray="3.2 2.5"/><circle cx="76" cy="110" r="6" fill="none" stroke="${GO}" stroke-width="3"/><circle cx="76" cy="110" r="2.2" fill="${P_.glow}"/>${hand(69,121)}`;
+    case 'shield':return shieldSVG(P_,id);
+  }
+  return '';
+}
+function shieldSVG(P_,id){return `<path d="M15 100 Q15 92 31 90 Q47 92 47 100 L47 116 Q47 131 31 139 Q15 131 15 116 Z" fill="url(#${id}m)" stroke="url(#${id}go)" stroke-width="1.6"/><path d="M31 100 L38 113 L31 126 L24 113 Z" fill="${P_.cloth}"/><path d="M31 104 L35 113 L31 122 L27 113 Z" fill="${P_.glow}" opacity=".7"/>`}
+const COIN={r:['#ffc2b6','#e5533f','#8e2517'],u:['#c2dcff','#3b87ea','#1b4c94'],g:['#b5f0cf','#2db46e','#146a3e'],y:['#fff3c2','#eab935','#9a6f10'],p:['#e3ccff','#a062e8','#5b2b9a'],w:['#ffffff','#d5dcec','#7f89a6']};
+const EMB={r:'M30 8.5C33.5 12.5 35.5 15 35.5 18.2C35.5 21.4 33 23.5 30 23.5C27 23.5 24.5 21.4 24.5 18.2C24.5 16 26 14.6 26.8 12.6C27.8 14.6 28.8 15 29.8 14.3C30.2 12.5 30.1 10.6 30 8.5Z',
+ u:'M30 8.5C33.5 13 35.5 16 35.5 18.6C35.5 21.4 33 23.5 30 23.5C27 23.5 24.5 21.4 24.5 18.6C24.5 16 26.5 13 30 8.5Z',
+ g:'M24 22.5C23.5 14 29.5 9.5 36.5 9.5C36.5 17.5 32 22.5 25 22.5Z',
+ y:'M32.5 8.5L24.5 17.2H29.3L27.3 23.5L35.5 14.3H30.7L32.5 8.5Z',
+ p:'M32.5 9A7.4 7.4 0 1 0 36.2 20.5A5.8 5.8 0 1 1 32.5 9Z',
+ w:'M30 8.5L31.9 13.6L37.2 13.8L33 17.1L34.5 22.3L30 19.3L25.5 22.3L27 17.1L22.8 13.8L28.1 13.6Z'};
+function coinSVG(k,n){
+  const [hi,base,dk]=COIN[k];const id='coin'+k;const dark=k==='w'||k==='y';
+  const stack=Math.min(Math.max(n,1),4);let s=`<svg viewBox="0 0 60 66" aria-hidden="true"><defs><radialGradient id="${id}f" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="${hi}"/><stop offset=".55" stop-color="${base}"/><stop offset="1" stop-color="${dk}"/></radialGradient><linearGradient id="${id}e" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${dk}"/><stop offset=".5" stop-color="${base}"/><stop offset="1" stop-color="${dk}"/></linearGradient></defs>`;
+  if(n===0)return s+`<circle cx="30" cy="30" r="25" fill="none" stroke="${base}" stroke-width="1.5" stroke-dasharray="3 3" opacity=".7"/><path d="${EMB[k]}" fill="${base}" opacity=".5"/></svg>`;
+  for(let j=stack-1;j>=1;j--)s+=`<circle cx="30" cy="${30+j*3}" r="26" fill="url(#${id}e)" stroke="#0006" stroke-width=".8"/><path d="M4.4 ${31+j*3}A26 26 0 0 0 55.6 ${31+j*3}" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="1" stroke-dasharray="1 1.4"/>`;
+  s+=`<circle cx="30" cy="30" r="26" fill="url(#${id}f)" stroke="${dk}" stroke-width="1.2"/>
+<circle cx="30" cy="30" r="23.6" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="2.6" stroke-dasharray="0.9 1.3"/>
+<circle cx="30" cy="30" r="20.2" fill="none" stroke="${dk}" stroke-opacity=".55" stroke-width="1.2"/>
+<circle cx="30" cy="30.8" r="20.2" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".7"/>
+<path d="${EMB[k]}" fill="${dark?dk:'#fff'}" fill-opacity="${dark?.75:.85}" stroke="${dk}" stroke-width=".6"/>
+<text x="30" y="43.5" text-anchor="middle" font-family="Oxanium,ui-monospace,monospace" font-weight="700" font-size="17" fill="${dark?'#2a2210':'#fff'}" stroke="${dark?'#fff8':dk}" stroke-width="${dark?.6:2.2}" paint-order="stroke">${n}</text>
+<ellipse cx="21" cy="16" rx="9" ry="4.5" transform="rotate(-30 21 16)" fill="#fff" opacity=".22"/></svg>`;
+  return s;
+}
+const ART={};
+function artSVG(c){
+  if(ART[c.id])return ART[c.id];
+  const P_=PAL[c.color],R=ROLE[c.role]||ROLE['劍士'],rn=rng(c.id*7+13),id='cx'+c.id;
+  const skin=SKIN[Math.floor(rn()*SKIN.length)],hair=HAIR[Math.floor(rn()*HAIR.length)],flip=rn()<.5;
+  const M=`url(#${id}m)`;
+  let s=`<svg class="cimg" viewBox="0 0 100 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>
+<linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${P_.s1}"/><stop offset="1" stop-color="${P_.s2}"/></linearGradient>
+<linearGradient id="${id}m" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2f5fb"/><stop offset=".5" stop-color="#9ca5bf"/><stop offset="1" stop-color="#4a5270"/></linearGradient>
+<linearGradient id="${id}go" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff1b8"/><stop offset=".5" stop-color="#d8a948"/><stop offset="1" stop-color="#7a5519"/></linearGradient>
+<radialGradient id="${id}a"><stop offset="0" stop-color="${P_.glow}" stop-opacity=".8"/><stop offset="1" stop-color="${P_.glow}" stop-opacity="0"/></radialGradient>
+<linearGradient id="${id}v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05060f" stop-opacity=".6"/><stop offset=".26" stop-color="#05060f" stop-opacity="0"/><stop offset=".6" stop-color="#05060f" stop-opacity="0"/><stop offset="1" stop-color="#05060f" stop-opacity=".82"/></linearGradient>
+</defs><rect width="100" height="140" fill="url(#${id}s)"/>`;
+  s+=scene(c.color,rn,P_);
+  if(c.tier===3){s+=`<g fill="${P_.glow}" opacity=".16">`;for(let k=0;k<9;k++){const a=-Math.PI+k*Math.PI/8,b=a+.13;s+=`<path d="M50 72 L${(50+120*Math.cos(a)).toFixed(1)} ${(72+120*Math.sin(a)).toFixed(1)} L${(50+120*Math.cos(b)).toFixed(1)} ${(72+120*Math.sin(b)).toFixed(1)} Z"/>`}s+='</g>'}
+  s+=`<ellipse cx="50" cy="82" rx="${c.tier===3?48:c.tier===2?40:34}" ry="${c.tier===3?54:44}" fill="url(#${id}a)" opacity="${c.tier===1?.6:.85}"/>`;
+  let ch='';
+  if(R.cape)ch+=`<path d="M24 94 Q7 118 3 140 L97 140 Q93 118 76 94 Z" fill="${P_.dark}"/><path d="M24 94 Q7 118 3 140 L12 140 Q16 118 30 98Z" fill="#000" opacity=".25"/>`;
+  if(R.wings){const wg=`<path d="M40 94 Q14 70 2 36 Q18 56 28 58 Q10 64 8 78 Q22 74 30 80 Q16 88 18 98 Q30 92 38 98 Z" fill="#f4f0ff" opacity=".9"/><path d="M40 94 Q14 70 2 36 Q18 56 28 58" stroke="${P_.glow}" stroke-width="1" fill="none"/>`;ch+=wg+`<g transform="translate(100 0) scale(-1 1)">${wg}</g>`}
+  if(R.hair==='long')ch+=`<path d="M35 70 Q33 48 50 47 Q67 48 65 70 L69 106 Q58 99 50 99 Q42 99 31 106 Z" fill="${hair}"/>`;
+  ch+=`<path d="M16 140 L19 110 Q21 95 38 91 L62 91 Q79 95 81 110 L84 140 Z" fill="${R.armor?M:P_.cloth}"/>`;
+  if(R.armor)ch+=`<ellipse cx="25" cy="100" rx="11" ry="8" fill="${M}" stroke="#3a4260" stroke-width=".6"/><ellipse cx="75" cy="100" rx="11" ry="8" fill="${M}" stroke="#3a4260" stroke-width=".6"/><path d="M36 104 Q50 112 64 104" stroke="#3a4260" stroke-width=".8" fill="none"/><path d="M34 124 Q50 130 66 124" stroke="#3a4260" stroke-width=".8" fill="none"/><rect x="19" y="130" width="62" height="10" fill="${P_.cloth}"/>`;
+  else ch+=`<path d="M40 91 L50 108 L60 91 Z" fill="${P_.dark}"/><path d="M50 108 L50 140" stroke="${P_.dark}" stroke-width="1.5"/><path d="M19 112 Q22 100 30 96" stroke="#000" stroke-width="3" opacity=".15" fill="none"/>`;
+  ch+=`<path d="M50 110 L55.5 117 L50 124 L44.5 117 Z" fill="${P_.glow}" stroke="#fff" stroke-width=".7"/>`;
+  ch+=`<rect x="45" y="78" width="10" height="14" fill="${skin}"/><rect x="45" y="85" width="10" height="5" fill="#000" opacity=".18"/>`;
+  const covered=['helmet','plume','hood','horns'].includes(R.hat);
+  if(!R.hair&&!covered)ch+=`<ellipse cx="50" cy="66" rx="14" ry="13.5" fill="${hair}"/>`;
+  ch+=`<ellipse cx="50" cy="70" rx="11.5" ry="13" fill="${skin}"/><path d="M38.6 72 Q39 82 50 83.2 Q42 80 38.6 72Z" fill="#000" opacity=".12"/>`;
+  if(!covered&&!['wizard','feather','goggles'].includes(R.hat))ch+=`<path d="M38.4 68 Q39.5 55.5 50 55.5 Q61 55.5 61.6 68 Q56 61 50 62.5 Q44 61 38.4 68 Z" fill="${hair}"/>`;
+  else if(['wizard','feather'].includes(R.hat))ch+=`<path d="M38.5 66 Q40 60 50 60 Q60 60 61.5 66 Q55 63 50 64 Q45 63 38.5 66Z" fill="${hair}"/>`;
+  const glowEye=R.eyes==='glow'||(c.color==='p'&&rn()<.5);
+  const ec=glowEye?P_.glow:'#1d1420';
+  ch+=`<ellipse cx="45.5" cy="71.5" rx="1.6" ry="${glowEye?1.1:1.8}" fill="${ec}"/><ellipse cx="54.5" cy="71.5" rx="1.6" ry="${glowEye?1.1:1.8}" fill="${ec}"/>`;
+  if(glowEye)ch+=`<ellipse cx="50" cy="71.5" rx="9" ry="3" fill="${P_.glow}" opacity=".18"/>`;
+  ch+=`<path d="M44 68 L47.5 67.4 M52.5 67.4 L56 68" stroke="#2a1c15" stroke-width=".8"/><path d="M47.6 78 Q50 79.4 52.4 78" stroke="#7a3a2e" stroke-width=".8" fill="none"/>`;
+  if(R.beard)ch+=`<path d="M40 74 Q41 92 50 97 Q59 92 60 74 Q56 81 50 81 Q44 81 40 74 Z" fill="#ebe6d9"/>`;
+  ch+=hatSVG(R.hat,P_,id,hair);
+  ch+=weaponSVG(R.wp,P_,id,skin);
+  if(R.shield)ch+=shieldSVG(P_,id);
+  s+=flip?`<g transform="translate(100 0) scale(-1 1)">${ch}</g>`:ch;
+  if(c.core)s+=`<g transform="translate(50 30)"><path d="M0 -8 L6 0 L0 8 L-6 0Z" fill="#fff" opacity=".95"/><path d="M0 -8 L6 0 L0 8 L-6 0Z" fill="none" stroke="${P_.glow}" stroke-width="3" opacity=".35"/></g>`;
+  s+=`<rect width="100" height="140" fill="url(#${id}v)"/></svg>`;
+  ART[c.id]=s;return s;
+}
+
+// ================= engine =================
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function mkCards(){
+  const out={1:[],2:[],3:[]};let id=0;
+  for(const t of [1,2,3]){
+    C.forEach((col,ci)=>{
+      const others=[1,2,3,4].map(k=>C[(ci+k)%5]);
+      PAT[t].forEach((p,j)=>{
+        const [pts,cp,icons,core,role]=p;
+        const o=[0,1,2,3].map(m=>others[(m+j+ci)%4]);
+        const cost={};
+        for(const key in cp){const c=key==='own'?col:o[+key[1]];cost[c]=(cost[c]||0)+cp[key]}
+        out[t].push({id:id++,tier:t,color:col,pts,cost,icons,core:!!core,name:TITLE[col]+role,role});
+      });
+    });
+    shuffle(out[t]);
+  }
+  return out;
+}
+
+let G=null;
+let MODE='local';
+const UI={sel:[],sheet:null,hint:null,anim:new Set(),rules:false,menu:null,flash:false,lastHuman:0,viewBoard:false,toast:''};
+const SAVE='xjsh-save-v2';
+let timer=null;
+
+function newGame(seats){
+  const n=seats.length;
+  const per=n===2?4:n===3?5:7;
+  const decks=mkCards();
+  const market={};for(const t of [1,2,3])market[t]=[0,1,2,3].map(()=>decks[t].pop());
+  const bank={};C.forEach(c=>bank[c]=per);bank.w=5;
+  G={
+    players:seats.map(s=>({name:s.name,uid:s.uid||null,type:s.type,level:s.level||0,tokens:{r:0,u:0,g:0,y:0,p:0,w:0},bonus:{r:0,u:0,g:0,y:0,p:0},core:0,icons:0,cardPts:0,cards:0,reserved:[],locs:[]})),
+    bank,decks,market,locations:shuffle(LOCS.map(([name,req])=>({name,req}))).slice(0,n+1),
+    ally:null,cur:0,round:1,finalRound:false,over:false,phase:'act',passStreak:0,log:[],last:'遊戲開始，由 '+esc(seats[0].name)+' 先手。',turnId:0,winner:null
+  };
+  UI.sel=[];UI.hint=null;UI.anim=new Set();UI.viewBoard=false;
+  for(const t of [1,2,3])G.market[t].forEach(c=>c&&UI.anim.add(c.id));
+  addLog(`<b>新局開始</b>：${n} 位玩家`);
+  UI.lastHuman=Math.max(0,G.players.findIndex(p=>p.type==='human'));
+  return G;
+}
+function addLog(s){G.log.unshift(s);if(G.log.length>60)G.log.pop()}
+function save(){if(MODE!=='local')return;try{localStorage.setItem(SAVE,JSON.stringify(G))}catch(e){}}
+function loadSave(){try{const s=localStorage.getItem(SAVE);if(!s)return null;const g=JSON.parse(s);return g&&g.players?g:null}catch(e){return null}}
+
+const P=i=>G.players[i];
+const tokTotal=p=>ALL.reduce((s,k)=>s+p.tokens[k],0);
+function score(i){const p=P(i);return p.cardPts+3*p.locs.length+(G.ally===i?3:0)}
+function meetsWin(i){const p=P(i);return score(i)>=WIN&&C.every(c=>p.bonus[c]>0)&&p.core>0}
+function needOf(p,c){const n={};for(const k of C)n[k]=Math.max(0,(c.cost[k]||0)-p.bonus[k]);return n}
+function shortfall(p,c){const n=needOf(p,c);let s=0;for(const k of C)s+=Math.max(0,n[k]-p.tokens[k]);return Math.max(0,s-p.tokens.w)}
+const canAfford=(p,c)=>shortfall(p,c)===0;
+function payPlan(p,c){const n=needOf(p,c);const parts=[];let gap={},wild=0;for(const k of C){if(!n[k])continue;const use=Math.min(n[k],p.tokens[k]);if(use)parts.push([k,use]);const rest=n[k]-use;if(rest){gap[k]=rest;wild+=rest}}return{parts,wildUse:Math.min(wild,p.tokens.w),gap,short:Math.max(0,wild-p.tokens.w)}}
+function draw(t){return G.decks[t].length?G.decks[t].pop():null}
+
+function doTake(i,cols){const p=P(i);for(const k of cols){G.bank[k]--;p.tokens[k]++}
+  const txt=cols.length===2&&cols[0]===cols[1]?`2 顆${CN[cols[0]]}`:cols.map(k=>CN[k]).join('、');
+  return `${nm(p)} 拿取了 ${txt}`}
+function doBuy(i,src,t,idx){const p=P(i);const c=src==='m'?G.market[t][idx]:p.reserved[idx];
+  const n=needOf(p,c);for(const k of C){const use=Math.min(n[k],p.tokens[k]);p.tokens[k]-=use;G.bank[k]+=use;const rest=n[k]-use;p.tokens.w-=rest;G.bank.w+=rest}
+  p.bonus[c.color]++;p.cardPts+=c.pts;p.icons+=c.icons;if(c.core)p.core++;p.cards++;
+  if(src==='m')G.market[t][idx]=draw(t);else p.reserved.splice(idx,1);
+  return `${nm(p)} 招募了 ${c.name}（${CN[c.color]}${c.pts?`・${c.pts} 分`:''}${c.core?'・星核':''}）`}
+function doReserve(i,t,idx){const p=P(i);let c;
+  if(idx<0){c=draw(t)}else{c=G.market[t][idx];G.market[t][idx]=draw(t)}
+  p.reserved.push(c);let got='';if(G.bank.w>0){G.bank.w--;p.tokens.w++;got='，獲得 1 顆星塵'}
+  return idx<0?`${nm(p)} 從第 ${ROMAN[t]} 階牌堆保留了一張卡${got}`:`${nm(p)} 保留了 ${c.name}${got}`}
+
+function apply(i,a){
+  let msg='';
+  if(a.type==='take')msg=doTake(i,a.cols);
+  else if(a.type==='buy')msg=doBuy(i,a.src,a.t,a.idx);
+  else if(a.type==='reserve')msg=doReserve(i,a.t,a.idx);
+  else msg=`${nm(P(i))} 無法行動，跳過回合`;
+  G.passStreak=a.type==='pass'?G.passStreak+1:0;
+  G.last=msg;addLog(msg);UI.flash=true;UI.sel=[];UI.hint=null;UI.sheet=null;
+  if(tokTotal(P(i))>MAXTOK){
+    if(P(i).type==='human'){G.phase='discard';persist();return}
+    aiDiscard(i);
+  }
+  finishTurn(i);
+}
+function finishTurn(i){
+  const p=P(i);G.phase='act';
+  const q=G.locations.findIndex(L=>Object.entries(L.req).every(([k,v])=>p.bonus[k]>=v));
+  if(q>=0){const L=G.locations.splice(q,1)[0];p.locs.push(L);addLog(`${nm(p)} 解放了據點「${L.name}」＋3 分`);G.last+=`；解放了據點「${L.name}」`}
+  if(p.icons>=ALLY_MIN&&G.ally!==i&&(G.ally===null||p.icons>P(G.ally).icons)){
+    const prev=G.ally;G.ally=i;addLog(prev===null?`${nm(p)} 取得「星盟之證」＋3 分`:`${nm(p)} 從 ${esc(P(prev).name)} 手中奪走「星盟之證」`);G.last+='；取得「星盟之證」'}
+  if(!G.finalRound&&meetsWin(i)){G.finalRound=true;addLog(`${nm(p)} 達成勝利條件！本輪結束後遊戲結束`)}
+  const n=G.players.length;
+  G.cur=(G.cur+1)%n;G.turnId++;G.turnAt=Date.now();
+  if(G.cur===0)G.round++;
+  if((G.finalRound&&G.cur===0)||G.passStreak>=n*2)endGame();
+  if(P(G.cur).type==='human')UI.lastHuman=G.cur;
+  persist();
+}
+function endGame(){
+  G.over=true;
+  const idx=G.players.map((_,i)=>i);
+  const elig=idx.filter(meetsWin);const pool=elig.length?elig:idx;
+  pool.sort((a,b)=>score(b)-score(a)||P(a).cards-P(b).cards);
+  G.winner=pool[0];
+  addLog(`<b>遊戲結束</b>：${esc(P(pool[0]).name)} 獲勝`);
+}
+function persist(){
+  if(MODE==='online'){render();if(NET.role==='host'){saveHost();broadcast();schedule()}return}
+  save();render();schedule();
+}
+
+// ---------- AI ----------
+function visible(i){const p=P(i);const v=[];for(const t of [1,2,3])G.market[t].forEach((c,idx)=>c&&v.push({c,src:'m',t,idx}));p.reserved.forEach((c,idx)=>v.push({c,src:'r',t:c.tier,idx}));return v}
+function demand(i,vis){const p=P(i);const d={r:0,u:0,g:0,y:0,p:0};for(const v of vis)for(const k of C)if((v.c.cost[k]||0)>p.bonus[k])d[k]++;
+  for(const L of G.locations)for(const k in L.req)if(p.bonus[k]<L.req[k])d[k]+=1.5;return d}
+function cardValue(i,c,dem,lvl){
+  const p=P(i);const prog=Math.min(1,score(i)/WIN);
+  let v=c.pts*3+(1-prog)*1.3;
+  for(const L of G.locations){if(L.req[c.color]&&p.bonus[c.color]<L.req[c.color]){const left=Object.entries(L.req).reduce((s,[k,x])=>s+Math.max(0,x-p.bonus[k]),0);v+=(lvl>=3?1.6:1)*Math.max(.3,1.8-left*.2)}}
+  if(c.icons){const leader=G.ally===null?0:P(G.ally).icons;v+=c.icons*(G.ally===i?.25:(p.icons+c.icons>=Math.max(ALLY_MIN,leader+1)?1.6:.7))}
+  if(p.bonus[c.color]===0)v+=.4+prog*2.5;
+  if(c.core&&p.core===0)v+=1+prog*5;
+  v+=dem[c.color]*.07;
+  if(lvl===1)v+=Math.random()*3;
+  return v;
+}
+function feasible(p,c){const n=needOf(p,c);let extra=0;for(const k of C){const lack=n[k]-p.tokens[k]-G.bank[k];if(lack>0)extra+=lack}return extra<=p.tokens.w+G.bank.w}
+function aiDecide(i){
+  const p=P(i);const lvl=p.level||2;const vis=visible(i);const dem=demand(i,vis);const prog=Math.min(1,score(i)/WIN);
+  const buys=vis.filter(v=>canAfford(p,v.c)).map(v=>({...v,val:cardValue(i,v.c,dem,lvl)})).sort((a,b)=>b.val-a.val);
+  let tg=vis.filter(v=>!canAfford(p,v.c)&&feasible(p,v.c)).map(v=>{const sf=shortfall(p,v.c);const turns=Math.ceil(sf/(lvl>=3?2.7:2.4))+1;const val=cardValue(i,v.c,dem,lvl);return{...v,val,turns,sc:val/Math.pow(turns,lvl>=3?1.1:1)}}).sort((a,b)=>b.sc-a.sc);
+  if(lvl===1&&Math.random()<.3)shuffle(tg);
+  const T=tg[0],T2=tg[1];
+  if(buys.length){const b=buys[0];
+    if(!T||b.c.pts>0||b.val>=1.1||b.val>=T.sc*.8||(prog>.75&&(b.c.core||p.bonus[b.c.color]===0)))return{type:'buy',src:b.src,t:b.t,idx:b.idx,why:b};
+  }
+  if(lvl>=2&&p.core===0&&prog>=.45&&p.reserved.length<MAXRES&&!p.reserved.some(c=>c.core)){
+    const cc=vis.filter(v=>v.src==='m'&&v.c.core).sort((a,b)=>shortfall(p,a.c)-shortfall(p,b.c))[0];
+    if(cc)return{type:'reserve',t:cc.t,idx:cc.idx,why:cc};
+  }
+  if(T){
+    const plan=planTake(p,T,T2);
+    if(plan&&plan.length)return{type:'take',cols:plan,why:T};
+    if(p.reserved.length<MAXRES&&T.src==='m')return{type:'reserve',t:T.t,idx:T.idx,why:T};
+  }
+  if(buys.length){const b=buys[0];return{type:'buy',src:b.src,t:b.t,idx:b.idx,why:b}}
+  const avail=C.filter(k=>G.bank[k]>0);
+  if(avail.length&&tokTotal(p)<MAXTOK)return{type:'take',cols:shuffle(avail).slice(0,Math.min(3,MAXTOK-tokTotal(p)))};
+  if(p.reserved.length<MAXRES){for(const t of [3,2,1]){const idx=G.market[t].findIndex(c=>c);if(idx>=0)return{type:'reserve',t,idx}}}
+  if(avail.length)return{type:'take',cols:shuffle(avail).slice(0,3)};
+  return{type:'pass'};
+}
+function wantOf(p,c){const n=needOf(p,c);const w={};for(const k of C)w[k]=Math.max(0,n[k]-p.tokens[k]);return w}
+function planTake(p,T,T2){
+  const w=wantOf(p,T.c);const w2=T2?wantOf(p,T2.c):{};
+  const room=MAXTOK-tokTotal(p);
+  if(room<=0)return null;
+  const wanted=C.filter(k=>G.bank[k]>0&&w[k]>0).sort((a,b)=>w[b]-w[a]||G.bank[b]-G.bank[a]);
+  if(!wanted.length)return null;
+  const k0=wanted[0];
+  if(w[k0]>=2&&G.bank[k0]>=4&&room>=2&&(wanted.length===1||room<3))return[k0,k0];
+  const pick=wanted.slice(0,3);
+  if(pick.length<3){
+    const extra=C.filter(k=>G.bank[k]>0&&!pick.includes(k)).sort((a,b)=>((w2[b]||0)-(w2[a]||0))||(G.bank[b]-G.bank[a]));
+    while(pick.length<3&&extra.length&&pick.length<room)pick.push(extra.shift());
+  }
+  if(pick.length===1&&w[k0]>=2&&G.bank[k0]>=4&&room>=2)return[k0,k0];
+  return pick.slice(0,Math.min(3,room));
+}
+function aiDiscard(i){
+  const p=P(i);const vis=visible(i);const dem=demand(i,vis);
+  const T=vis.filter(v=>!canAfford(p,v.c)).sort((a,b)=>shortfall(p,a.c)-shortfall(p,b.c))[0];
+  const w=T?wantOf(p,T.c):{};
+  while(tokTotal(p)>MAXTOK){
+    const k=C.filter(k=>p.tokens[k]>0).sort((a,b)=>((w[a]||0)-(w[b]||0))||(dem[a]-dem[b]))[0];
+    if(!k)break;p.tokens[k]--;G.bank[k]++;
+  }
+  addLog(`${nm(p)} 超過 10 顆，歸還了部分晶石`);
+}
+function schedule(){
+  clearTimeout(timer);
+  if(!G||G.over||G.phase!=='act')return;
+  const p=P(G.cur);if(p.type!=='ai')return;
+  if(MODE==='online'&&(!amDriver()||NET.busy))return;
+  const tid=G.turnId,mode=MODE;
+  timer=setTimeout(()=>{if(!G||G.turnId!==tid||G.over||MODE!==mode)return;if(MODE==='online'&&NET.busy)return;apply(G.cur,aiDecide(G.cur))},950);
+}
+
+// ================= online (peer-to-peer) =================
+const PREFIX='xjsh-v1-';
+const NET={ready:true,role:null,peer:null,conns:new Map(),hostConn:null,code:null,doc:null,myId:null,myName:'',busy:false,err:'',status:'',online:new Set(),retryT:null,everConnected:false,resuming:false};
+NET.myId=(()=>{let id='';try{id=localStorage.getItem('xjsh-pid')||'';if(!id){id='p_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);localStorage.setItem('xjsh-pid',id)}}catch(e){id='t_'+Math.random().toString(36).slice(2,10)}return id})();
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function peerOpts(){const q=new URLSearchParams(location.search);const o={debug:0};if(q.get('ph')){o.host=q.get('ph');o.port=+q.get('pp')||9000;o.path=q.get('ppath')||'/';o.secure=q.get('ps')==='1'}return o}
+function hasPeer(){return typeof window.Peer==='function'}
+let NICK=null;
+function nick(){if(NICK)return NICK;let n='';try{n=localStorage.getItem('xjsh-nick')||''}catch(e){}if(!n){n='玩家'+Math.floor(10+Math.random()*90);NICK=n}return n}
+function setNick(v){NICK=v;try{localStorage.setItem('xjsh-nick',v)}catch(e){}}
+const CODECH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const genCode=()=>Array.from({length:4},()=>CODECH[Math.floor(Math.random()*CODECH.length)]).join('');
+function inviteLink(code){return location.origin+location.pathname+'?room='+code}
+function saveHost(){if(NET.role!=='host')return;try{localStorage.setItem('xjsh-host',JSON.stringify({code:NET.code,doc:NET.doc,G:G,at:Date.now()}))}catch(e){}}
+function loadHost(){try{const s=JSON.parse(localStorage.getItem('xjsh-host')||'null');if(s&&s.code&&Date.now()-(s.at||0)<24*3600e3)return s}catch(e){}return null}
+function clearHost(){try{localStorage.removeItem('xjsh-host')}catch(e){}}
+function setLastRoom(c){try{if(c)localStorage.setItem('xjsh-lastroom',c);else localStorage.removeItem('xjsh-lastroom')}catch(e){}}
+function lastRoom(){try{return localStorage.getItem('xjsh-lastroom')||''}catch(e){return ''}}
+function peerErr(e){const t=e&&e.type;
+  if(t==='browser-incompatible')return '這個瀏覽器不支援連線對戰，請改用最新版 Chrome、Safari 或 Edge。';
+  if(t==='network'||t==='server-error'||t==='socket-error'||t==='socket-closed')return '連不上配對伺服器，請檢查網路後再試。';
+  if(t==='peer-unavailable')return '找不到這個房間，房主可能還沒建立或已經離開。';
+  return '連線發生問題（'+(t||'unknown')+'），請再試一次。'}
+
+// ---- host ----
+function hostCreate(cap){
+  if(!hasPeer()){NET.err='連線元件載入失敗，請重新整理頁面。';renderOverlay();return}
+  NET.err='';const code=genCode();
+  const doc={code,status:'lobby',host:NET.myId,hostNick:nick(),cap,seats:Array.from({length:cap},(_,i)=>i===0?{uid:NET.myId,nick:nick(),type:'human'}:{uid:null,nick:'',type:'open'})};
+  openHost(code,doc,null,false);
+}
+function openHost(code,doc,g,resume){
+  leaveNet(true);
+  MODE='online';NET.role='host';NET.code=code;NET.doc=doc;NET.online=new Set([NET.myId]);NET.resuming=resume;NET.status='建立房間中…';
+  G=g;UI.menu=null;UI.sheet=null;UI.viewBoard=false;clearTimeout(timer);
+  if(G){const me=G.players.findIndex(p=>p.uid===NET.myId);UI.lastHuman=me>=0?me:0}
+  render();
+  let tries=0;
+  const start=()=>{
+    const peer=new Peer(PREFIX+code,peerOpts());NET.peer=peer;
+    peer.on('open',()=>{NET.status='';saveHost();setLastRoom(null);render();schedule()});
+    peer.on('connection',conn=>{
+      conn.on('data',d=>hostRecv(conn,d));
+      const drop=()=>{const c=NET.conns.get(conn.peer);if(c&&c.conn===conn){NET.conns.delete(conn.peer);refreshOnline();broadcast();render()}};
+      conn.on('close',drop);conn.on('error',drop);
+    });
+    peer.on('disconnected',()=>{if(NET.peer===peer&&!peer.destroyed){NET.status='與配對伺服器中斷，重新連線中…（已連上的玩家不受影響）';render();setTimeout(()=>{try{if(!peer.destroyed)peer.reconnect()}catch(e){}},1500)}});
+    peer.on('error',e=>{
+      if(NET.peer!==peer)return;
+      if(e.type==='unavailable-id'){
+        peer.destroy();
+        if(resume&&tries<20){tries++;NET.status='正在重新開啟房間 '+code+'…';render();setTimeout(()=>{if(NET.role==='host'&&NET.code===code)start()},3000);return}
+        if(!resume&&!G){const nc=genCode();NET.code=code=nc;NET.doc.code=nc;start();return}
+        NET.err='這個房號正在使用中，請稍後再試。';exitOnline();return;
+      }
+      if(e.type==='network'||e.type==='server-error'||e.type==='socket-error'||e.type==='socket-closed'){NET.status=peerErr(e);render();return}
+      if(e.type==='browser-incompatible'){NET.err=peerErr(e);exitOnline();return}
+    });
+  };
+  start();
+}
+function refreshOnline(){NET.online=new Set([NET.myId,...[...NET.conns.values()].map(c=>c.pid).filter(Boolean)])}
+function sendTo(conn,msg){try{if(conn&&conn.open)conn.send(msg)}catch(e){}}
+function broadcast(){
+  if(NET.role!=='host')return;
+  const msg={t:'sync',doc:NET.doc,G:G,online:[...NET.online]};
+  for(const {conn} of NET.conns.values())sendTo(conn,msg);
+}
+function hostRecv(conn,d){
+  if(!d||typeof d!=='object')return;
+  const doc=NET.doc;
+  if(d.t==='hello'){
+    const pid=String(d.pid||'').slice(0,40),name=String(d.name||'玩家').slice(0,10)||'玩家';
+    if(!pid)return;
+    NET.conns.set(conn.peer,{conn,pid});
+    if(doc.status==='lobby'){
+      let s=doc.seats.find(x=>x.uid===pid);
+      if(s)s.nick=name;
+      else{const i=doc.seats.findIndex(x=>x.type==='open');
+        if(i<0){sendTo(conn,{t:'err',msg:'房間已滿。',fatal:true});NET.conns.delete(conn.peer);setTimeout(()=>{try{conn.close()}catch(e){}},500);return}
+        doc.seats[i]={uid:pid,nick:name,type:'human'};
+        addLobbyLog(name+' 加入了房間');
+      }
+    }
+    refreshOnline();saveHost();broadcast();render();return;
+  }
+  const c=NET.conns.get(conn.peer);if(!c)return;const pid=c.pid;
+  if(d.t==='leave'){
+    if(doc.status==='lobby'){const i=doc.seats.findIndex(x=>x.uid===pid);if(i>0)doc.seats[i]={uid:null,nick:'',type:'open'}}
+    NET.conns.delete(conn.peer);refreshOnline();saveHost();broadcast();render();return;
+  }
+  if(!G||G.over)return;
+  if(d.t==='act'){
+    const i=G.cur,p=P(i);
+    if(p.type!=='human'||p.uid!==pid||G.phase!=='act'||d.turnId!==G.turnId||!validAction(i,d.a)){sendTo(conn,{t:'sync',doc:NET.doc,G,online:[...NET.online]});return}
+    apply(i,sanitize(d.a));return;
+  }
+  if(d.t==='ret'){
+    const p=P(G.cur);const k=d.k;
+    if(G.phase!=='discard'||p.uid!==pid||!C.includes(k)||p.tokens[k]<=0){broadcast();return}
+    returnToken(k);return;
+  }
+  if(d.t==='takeover'){const i=+d.i;if(G.players[i]&&P(i).type==='human'&&!NET.online.has(P(i).uid))takeover(i);return}
+}
+function sanitize(a){
+  if(a.type==='take')return{type:'take',cols:a.cols.slice(0,3)};
+  if(a.type==='buy')return{type:'buy',src:a.src,t:+a.t,idx:+a.idx};
+  if(a.type==='reserve')return{type:'reserve',t:+a.t,idx:+a.idx};
+  return{type:'pass'};
+}
+function validAction(i,a){
+  if(!a||typeof a!=='object')return false;const p=P(i);
+  if(a.type==='take'){
+    const cols=a.cols;if(!Array.isArray(cols)||!cols.length||cols.length>3||!cols.every(k=>C.includes(k)))return false;
+    if(cols.length===2&&cols[0]===cols[1])return G.bank[cols[0]]>=4;
+    if(new Set(cols).size!==cols.length)return false;
+    return cols.every(k=>G.bank[k]>0);
+  }
+  if(a.type==='buy'){
+    if(a.src==='m'){const t=+a.t;if(![1,2,3].includes(t))return false;const c=G.market[t][+a.idx];return !!c&&canAfford(p,c)}
+    if(a.src==='r'){const c=p.reserved[+a.idx];return !!c&&canAfford(p,c)}
+    return false;
+  }
+  if(a.type==='reserve'){
+    const t=+a.t;if(![1,2,3].includes(t)||p.reserved.length>=MAXRES)return false;
+    return +a.idx<0?G.decks[t].length>0:!!G.market[t][+a.idx];
+  }
+  if(a.type==='pass')return !anyLegal(i);
+  return false;
+}
+function addLobbyLog(){}
+function hostSetSeat(i,val){
+  const doc=NET.doc;if(NET.role!=='host'||doc.status!=='lobby')return;const s=doc.seats[i];if(!s||s.type==='human')return;
+  doc.seats[i]=val==='open'?{uid:null,nick:'',type:'open'}:{uid:null,nick:['','電腦・簡單','電腦・普通','電腦・困難'][+val.slice(2)],type:'ai',level:+val.slice(2)};
+  saveHost();broadcast();render();
+}
+function hostKick(i){
+  const doc=NET.doc;if(NET.role!=='host'||doc.status!=='lobby'||i===0)return;const s=doc.seats[i];if(!s||s.type!=='human')return;
+  for(const [k,c] of NET.conns)if(c.pid===s.uid){sendTo(c.conn,{t:'err',msg:'你已被房主移出房間。',fatal:true});NET.conns.delete(k)}
+  doc.seats[i]={uid:null,nick:'',type:'open'};refreshOnline();saveHost();broadcast();render();
+}
+function hostStart(){
+  const doc=NET.doc;if(NET.role!=='host'||doc.status!=='lobby')return;
+  const seats=doc.seats.filter(s=>s.type!=='open');if(seats.length<2)return;
+  let ai=0;const names=['星語','鐵砧','夜梟'];
+  newGame(seats.map(s=>s.type==='human'?{name:s.nick||'玩家',uid:s.uid,type:'human'}:{name:names[ai++]||'電腦',type:'ai',level:s.level||2}));
+  G.turnAt=Date.now();doc.status='playing';
+  const me=G.players.findIndex(p=>p.uid===NET.myId);UI.lastHuman=me>=0?me:0;
+  persist();
+}
+function rematch(){if(NET.role!=='host')return;NET.doc.status='lobby';G=null;UI.viewBoard=false;saveHost();broadcast();render()}
+
+// ---- guest ----
+function guestJoin(code){
+  code=(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(code.length!==4){NET.err='請輸入 4 碼房號。';renderOverlay();return}
+  if(!hasPeer()){NET.err='連線元件載入失敗，請重新整理頁面。';renderOverlay();return}
+  leaveNet(true);
+  MODE='online';NET.role='guest';NET.code=code;NET.doc=null;NET.err='';NET.everConnected=false;NET.status='連線中…';
+  G=null;UI.menu=null;UI.sheet=null;UI.viewBoard=false;clearTimeout(timer);
+  setLastRoom(code);render();
+  const peer=new Peer(peerOpts());NET.peer=peer;
+  peer.on('open',()=>connectHost());
+  peer.on('disconnected',()=>{if(NET.peer===peer&&!peer.destroyed)setTimeout(()=>{try{if(!peer.destroyed)peer.reconnect()}catch(e){}},1500)});
+  peer.on('error',e=>{
+    if(NET.peer!==peer)return;
+    if(e.type==='peer-unavailable'){
+      if(!NET.everConnected){NET.err=peerErr(e);setLastRoom(null);exitOnline();return}
+      NET.status='房主暫時離線，持續重新連線中…';render();retryHost();return;
+    }
+    if(e.type==='browser-incompatible'){NET.err=peerErr(e);exitOnline();return}
+    NET.status=peerErr(e);render();
+    if(!NET.everConnected&&(e.type==='network'||e.type==='server-error'||e.type==='socket-error')){NET.err=peerErr(e);exitOnline()}
+  });
+}
+function connectHost(){
+  if(NET.role!=='guest'||!NET.peer||NET.peer.destroyed)return;
+  const c=NET.peer.connect(PREFIX+NET.code,{reliable:true});NET.hostConn=c;
+  const to=setTimeout(()=>{if(!c.open&&NET.hostConn===c){try{c.close()}catch(e){}if(!NET.everConnected){NET.err='連不上房主。請確認房號正確，或換個網路（例如關閉 VPN）再試。';exitOnline()}else retryHost()}},15000);
+  c.on('open',()=>{clearTimeout(to);NET.everConnected=true;NET.status='';sendTo(c,{t:'hello',pid:NET.myId,name:nick()});render()});
+  c.on('data',guestRecv);
+  c.on('close',()=>{clearTimeout(to);if(NET.hostConn===c&&NET.role==='guest'){NET.status='與房主斷線，重新連線中…';NET.online=new Set();render();retryHost()}});
+  c.on('error',()=>{});
+}
+function retryHost(){clearTimeout(NET.retryT);NET.retryT=setTimeout(()=>{if(NET.role==='guest')connectHost()},3000)}
+function guestRecv(d){
+  if(!d||typeof d!=='object')return;
+  if(d.t==='err'){NET.err=String(d.msg||'');if(d.fatal){setLastRoom(null);exitOnline()}else render();return}
+  if(d.t==='sync'){
+    NET.doc=d.doc;NET.online=new Set(d.online||[]);NET.busy=false;clearTimeout(NET.ackT);
+    const prev=G?G.turnId:-1;G=d.G||null;
+    if(G){if(G.turnId!==prev){UI.sel=[];UI.hint=null;UI.sheet=null;UI.flash=true}const me=G.players.findIndex(p=>p.uid===NET.myId);UI.lastHuman=me>=0?me:0}
+    else UI.viewBoard=false;
+    render();
+  }
+}
+
+// ---- shared ----
+function guestSend(msg){
+  NET.busy=true;NET.pendingMsg=msg;sendTo(NET.hostConn,msg);
+  clearTimeout(NET.ackT);let tries=0;
+  const chk=()=>{if(!NET.busy||NET.role!=='guest')return;tries++;
+    if(tries<=2&&NET.hostConn&&NET.hostConn.open){sendTo(NET.hostConn,{t:'hello',pid:NET.myId,name:nick()});sendTo(NET.hostConn,msg);NET.ackT=setTimeout(chk,4000);return}
+    NET.busy=false;flashMsg('房主沒有回應，請再操作一次');connectHost()};
+  NET.ackT=setTimeout(chk,4000);
+}
+function act(a){
+  if(MODE==='online'&&NET.role==='guest'){guestSend({t:'act',a,turnId:G.turnId});UI.sel=[];UI.sheet=null;render();return}
+  apply(G.cur,a);
+}
+function returnToken(k){
+  const p=P(G.cur);if(p.tokens[k]<=0)return;
+  p.tokens[k]--;G.bank[k]++;
+  if(tokTotal(p)<=MAXTOK){addLog(`${nm(p)} 歸還晶石至 10 顆`);finishTurn(G.cur)}else persist();
+}
+function takeover(i){
+  if(MODE!=='online'||!G)return;
+  if(NET.role==='guest'){sendTo(NET.hostConn,{t:'takeover',i});return}
+  const p=P(i);if(p.type!=='human')return;
+  p.type='ai';p.level=2;addLog(`${nm(p)} 離線，改由電腦代打`);G.last=`${esc(p.name)} 改由電腦代打`;
+  if(G.phase==='discard'&&G.cur===i){aiDiscard(i);finishTurn(i);return}
+  persist();
+}
+function leaveNet(silent){
+  clearTimeout(NET.retryT);
+  if(NET.role==='guest'&&NET.hostConn)sendTo(NET.hostConn,{t:'leave'});
+  const peer=NET.peer;NET.peer=null;NET.hostConn=null;
+  if(peer)setTimeout(()=>{try{peer.destroy()}catch(e){}},silent?0:200);
+  NET.conns=new Map();NET.online=new Set();NET.role=null;NET.busy=false;NET.status='';
+}
+function exitOnline(){
+  leaveNet();clearTimeout(timer);
+  NET.code=null;NET.doc=null;MODE='local';
+  G=loadSave();UI.viewBoard=false;
+  if(G){UI.lastHuman=Math.max(0,G.players.findIndex(p=>p.type==='human'));G.players.forEach(p=>p.reserved.forEach(c=>UI.anim.add(c.id)));for(const t of [1,2,3])G.market[t].forEach(c=>c&&UI.anim.add(c.id))}
+  UI.menu={tab:'online',seats:defaultSeats(2),cap:UI.menu?.cap||2,code:''};
+  render();
+}
+function leaveRoom(){
+  if(NET.role==='host'){clearHost()}
+  else setLastRoom(null);
+  exitOnline();
+}
+function isOnline(uid){return NET.online.has(uid)}
+function flashMsg(t){t=t||'連線發生問題';if(G){G.last=esc(t);UI.flash=true;render()}else{NET.err=t;renderOverlay()}}
+function commit(){saveHost();broadcast()}
+function amDriver(){return NET.role==='host'}
+
+// ---------- human helpers ----------
+function focus(){
+  if(MODE==='online'){const i=G.players.findIndex(p=>p.uid===NET.myId);return i>=0?i:0}
+  return P(G.cur).type==='human'?G.cur:UI.lastHuman}
+function myTurn(){
+  if(!G||G.over||G.phase!=='act')return false;const p=P(G.cur);if(p.type!=='human')return false;
+  if(MODE==='online')return p.uid===NET.myId&&!NET.busy;
+  return true}
+function myDiscard(){if(!G||G.phase!=='discard')return false;const p=P(G.cur);return MODE==='online'?p.uid===NET.myId&&!NET.busy:p.type==='human'}
+function anyLegal(i){const p=P(i);if(C.some(k=>G.bank[k]>0))return true;if(p.reserved.length<MAXRES&&[1,2,3].some(t=>G.market[t].some(c=>c)||G.decks[t].length))return true;return visible(i).some(v=>canAfford(p,v.c))}
+function toggleTok(k){
+  if(!myTurn())return;
+  if(k==='w'){say('星塵（萬用）只能透過「保留」卡牌取得');return}
+  if(G.bank[k]<=0){say(`${CN[k]} 已經沒有庫存了`);return}
+  const s=UI.sel;
+  if(s.includes(k)){
+    if(s.length===1){if(G.bank[k]>=4)UI.sel=[k,k];else{UI.sel=[];say(`${CN[k]} 庫存不足 4 顆，不能拿 2 顆同色`);return}}
+    else if(s.length===2&&s[0]===s[1])UI.sel=[];
+    else UI.sel=s.filter(x=>x!==k);
+  }else{
+    if(s.length===2&&s[0]===s[1])UI.sel=[k];
+    else if(s.length>=3){say('最多拿 3 顆不同顏色');return}
+    else UI.sel=[...s,k];
+  }
+  render();
+}
+function say(t){G.last=t;UI.flash=true;render()}
+
+// ---------- rendering ----------
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const nm=p=>`<b>${esc(p.name)}</b>`;
+function cardHTML(c,attrs,opt={}){
+  const fi=focus();const p=P(fi);
+  const can=opt.hl&&myTurn()&&canAfford(p,c);
+  let fresh='';if(!UI.anim.has(c.id)){UI.anim.add(c.id);fresh=' fresh'}
+  const chips=C.filter(k=>c.cost[k]).map(k=>`<span class="chip k-${k}${p.bonus[k]>=c.cost[k]?' have':''}">${c.cost[k]}</span>`).join('');
+  return `<button class="card k-${c.color} t${c.tier}${can?' can':''}${fresh}" ${attrs} aria-label="${esc(c.name)}，${c.pts} 分，提供${CN[c.color]}">
+   ${artSVG(c)}
+   <div class="ctop"><span class="cpts">${c.pts||''}</span><span class="gem${c.core?' core':''}"></span></div>
+   <div class="cicons">${STAR.repeat(c.icons)}</div>
+   <div class="cname">${esc(c.name)}</div>
+   <div class="ccost">${chips}</div></button>`;
+}
+function reqHTML(req){return C.filter(k=>req[k]).map(k=>`<span class="rq k-${k}">${req[k]}</span>`).join('')}
+function ptag(p){return p.type==='ai'?['','簡單','普通','困難'][p.level]+'電腦':'玩家'}
+
+function render(){
+  const app=document.getElementById('app');
+  if(!G){app.innerHTML=`<div class="app"><header class="top"><div class="brand"><h1>星晶守護者</h1><small>收集晶石・招募英雄・奪取星核</small></div></header></div>`;renderOverlay();return}
+  const fi=focus();const me=P(fi);const online=MODE==='online';
+  const nx=G.locations.length+1;
+  const allyHolder=G.ally===null?'尚無人持有':`持有者：${esc(P(G.ally).name)}（${P(G.ally).icons} 徽章）`;
+  const extras=`<div class="extras" style="--n:${nx};--m:${Math.ceil(nx/2)}">
+    <div class="loc ally"><div class="lname">星盟之證</div><div class="lpts">3</div><div class="lsub">最先集滿 ${ALLY_MIN} 枚 ${STAR} 者獲得；被超越即易手<br>${allyHolder}</div></div>
+    ${G.locations.map(L=>`<div class="loc"><div class="lname">${L.name}</div><div class="lpts">3</div><div class="req">${reqHTML(L.req)}</div></div>`).join('')}
+  </div>`;
+  const tiers=[3,2,1].map(t=>`<div class="tier">
+    <button class="deck${G.decks[t].length?'':' empty'}" data-act="deck" data-t="${t}" aria-label="第 ${t} 階牌堆"><span class="roman">${ROMAN[t]}</span><span class="cnt">${G.decks[t].length}</span></button>
+    ${G.market[t].map((c,i)=>c?cardHTML(c,`data-act="card" data-t="${t}" data-i="${i}"`,{hl:1}):`<div class="slot"></div>`).join('')}
+  </div>`).join('');
+
+  const sel=UI.sel;const dbl=sel.length===2&&sel[0]===sel[1];
+  const waitTxt=G.over?'遊戲已結束':NET.status?esc(NET.status):NET.busy?'同步中…':`等待 ${esc(P(G.cur).name)} 行動…`;
+  const bank=`<section class="panel bank"><h3 class="ptitle"><span>晶石庫</span><span>點選晶石後按「拿取」</span></h3>
+   <div class="tokens">${ALL.map(k=>{const cnt=sel.filter(x=>x===k).length;return `<div class="tokw"><button class="tok k-${k}${cnt?' sel':''}${G.bank[k]?'':' zero'}" data-act="tok" data-k="${k}" aria-label="${CN[k]} 剩 ${G.bank[k]}">${coinSVG(k,G.bank[k])}${cnt?`<span class="badge">×${cnt}</span>`:''}</button><span class="tlab">${CN[k]}</span></div>`}).join('')}</div>
+   <div class="takebar">${myTurn()?`<span class="msg">${sel.length?(dbl?`拿 2 顆 ${CN[sel[0]]}`:`已選：${sel.map(k=>CN[k]).join('、')}`+(sel.length===1?(G.bank[sel[0]]>=4?`（再點一次${CN[sel[0]]}＝拿 2 顆同色）`:`（${CN[sel[0]]}剩 ${G.bank[sel[0]]} 顆，不足 4 顆不能拿 2 顆同色）`):'')):'點選晶石幣：3 顆不同色，或同一色點兩次拿 2 顆（庫存需 ≥4）'}${sel.length&&tokTotal(me)+sel.length>MAXTOK?' <span class="warn">・超過 10 顆需歸還</span>':''}</span>
+     <button class="btn sm" data-act="clr" ${sel.length?'':'disabled'}>清除</button><button class="btn primary sm" data-act="take" ${sel.length?'':'disabled'}>拿取晶石</button>`:`<span class="msg">${waitTxt}</span>`}</div>
+  </section>`;
+
+  const now=Date.now();
+  const opp=G.players.map((p,i)=>{if(i===fi)return '';
+    const dot=online&&p.type==='human'&&p.uid?`<span class="dot${isOnline(p.uid)?' on':''}" title="${isOnline(p.uid)?'在線':'離線'}"></span>`:'';
+    const canTake=online&&!G.over&&p.type==='human'&&p.uid!==NET.myId&&G.cur===i&&!isOnline(p.uid);
+    return `<div class="pc${i===G.cur&&!G.over?' cur':''}">
+    <div class="ph">${dot}<span class="pname">${esc(p.name)}</span><span class="ptag">${ptag(p)}</span>${i===G.cur&&!G.over?(p.type==='ai'?'<span class="thinking">思考中…</span>':'<span class="thinking">行動中…</span>'):''}<span class="pscore">${score(i)}</span></div>
+    <div class="mini">${ALL.map(k=>`<div class="mc"><span class="md k-${k}${k!=='w'&&p.bonus[k]?'':' none'}"></span><span class="v">${k==='w'?'–':p.bonus[k]}</span><span class="v tk">${p.tokens[k]}</span></div>`).join('')}
+      <div class="mc" style="padding-left:4px"><span class="v" style="font-size:10px;color:var(--muted)">卡</span><span class="v">${p.cards}</span><span class="v tk">幣</span></div></div>
+    <div class="meta"><span>徽章 <b>${p.icons}</b></span><span>星核 <b>${p.core}</b></span><span>保留 <b>${p.reserved.length}</b></span><span>據點 <b>${p.locs.length}</b></span>${G.ally===i?'<span style="color:var(--brass2)">★ 星盟之證</span>':''}${meetsWin(i)?'<span class="good">已達成條件</span>':''}</div>
+    ${canTake?`<div style="margin-top:8px"><button class="btn sm" data-act="takeover" data-i="${i}">對方離線？改由電腦代打</button></div>`:''}
+  </div>`}).join('');
+
+  const discard=myDiscard();
+  const spectator=online&&!G.players.some(p=>p.uid===NET.myId);
+  const goals=[[score(fi)>=WIN,`${score(fi)}/${WIN} 分`],[C.every(c=>me.bonus[c]>0),`五色齊全 ${C.filter(c=>me.bonus[c]>0).length}/5`],[me.core>0,`星核 ${me.core>0?'✓':'✗'}`]];
+  const ledger=ALL.map(k=>`<div class="lc k-${k}${discard&&me.tokens[k]?' btn-ret':''}" ${discard&&me.tokens[k]?`data-act="ret" data-k="${k}" role="button" tabindex="0"`:''}>
+      ${k==='w'?'<span class="bd k-w none" style="opacity:.15"><span></span></span>':`<span class="bd k-${k}${me.bonus[k]?'':' none'}"><span>${me.bonus[k]}</span></span>`}
+      <span class="tc k-${k}${me.tokens[k]?'':' none'}">${me.tokens[k]}</span><span class="ll">${CS[k]}</span></div>`).join('')+
+      `<div class="lc core"><span class="bd"><span>${me.core}</span></span><span class="tc" style="background:#2a2f5a;color:var(--brass2)">${me.icons}</span><span class="ll">核/徽</span></div>`;
+  const resv=[0,1,2].map(i=>me.reserved[i]?cardHTML(me.reserved[i],`data-act="rcard" data-i="${i}" style="width:100%"`,{hl:1}):`<div class="slot"></div>`).join('');
+  const meP=`<section class="panel me">
+    <div class="mehead"><div><div class="sublab">${spectator?'觀戰中':G.cur===fi&&!G.over?'輪到你了':'你的陣營'}</div><div class="mename">${esc(me.name)}</div></div>
+      <div class="bigscore">${score(fi)}<small>分</small></div>
+      <div class="goals">${goals.map(([d,t])=>`<span class="goal${d?' done':''}">${t}</span>`).join('')}</div></div>
+    ${discard?`<div class="hintbox" style="margin:0 0 10px;border-color:var(--bad)">晶石超過 10 顆：點選下方紅框的晶石歸還，還需歸還 <b>${tokTotal(me)-MAXTOK}</b> 顆。</div>`:''}
+    <div class="sublab">上排＝已招募卡的永久折扣 ◆　下排＝手上晶石 ●（共 ${tokTotal(me)}/10）</div>
+    <div class="ledger">${ledger}</div>
+    <div class="merow">
+      <div><div class="sublab">保留區（${me.reserved.length}/3）</div><div class="resv">${resv}</div></div>
+      <div><div class="sublab">據點</div><div style="display:flex;flex-direction:column;gap:4px;font-size:12.5px">${me.locs.length?me.locs.map(L=>`<span>◈ ${L.name}</span>`).join(''):'<span style="color:var(--dim)">尚無</span>'}${G.ally===fi?'<span style="color:var(--brass2)">★ 星盟之證</span>':''}</div></div>
+      <div class="mebtns">${myTurn()?`<button class="btn sm" data-act="hint">提示</button>${anyLegal(G.cur)?'':'<button class="btn sm" data-act="pass">跳過回合</button>'}`:''}</div>
+    </div>
+    ${UI.hint?`<div class="hintbox">${UI.hint}</div>`:''}
+  </section>`;
+
+  const netPill=online?`<span class="pill net">房號 <b style="font-family:var(--fn);letter-spacing:.15em">${esc(NET.code)}</b>・線上</span>`:'';
+  app.innerHTML=`<div class="app">
+   <header class="top"><div class="brand"><h1>星晶守護者</h1><small>收集晶石・招募英雄・奪取星核</small></div>
+     <div class="turninfo">${netPill}<span class="pill">第 <b>${G.round}</b> 輪</span>${G.finalRound&&!G.over?'<span class="pill" style="border-color:var(--bad);color:var(--bad)">最後一輪</span>':''}</div>
+     <button class="btn sm" data-act="rules">規則</button>${online?'<button class="btn sm" data-act="leavegame">離開房間</button>':'<button class="btn sm" data-act="menu">選單</button>'}</header>
+   <main class="board">
+     <div class="toast${UI.flash?' flash':''}">${online&&NET.status?`<span class="warn">${esc(NET.status)}</span>`:G.last}</div>
+     ${extras}
+     ${tiers}
+   </main>
+   <div class="side">
+     <section class="panel opp"><h3 class="ptitle"><span>${online?'其他玩家':'對手'}</span><span>◆折扣 ●晶石</span></h3><div class="plist">${opp}</div></section>
+     ${bank}
+     <section class="panel logp"><h3 class="ptitle"><span>戰報</span></h3><div class="log">${G.log.map(l=>`<div>${l}</div>`).join('')}</div></section>
+   </div>
+   ${meP}
+  </div>`;
+  UI.flash=false;
+  renderOverlay();
+}
+
+function renderOverlay(){
+  let ov=document.getElementById('ov');
+  const html=overlayHTML();
+  if(!html){if(ov)ov.remove();return}
+  const ae=document.activeElement;const keep=ae&&ov&&ov.contains(ae)&&ae.id?{id:ae.id,s:ae.selectionStart,e:ae.selectionEnd}:null;
+  if(!ov){ov=document.createElement('div');ov.id='ov';ov.className='ov';document.body.appendChild(ov)}
+  ov.innerHTML=html;
+  if(keep){const el=document.getElementById(keep.id);if(el){el.focus();try{if(keep.s!=null)el.setSelectionRange(keep.s,keep.e)}catch(e){}}}
+}
+function rulesHTML(){return `<div class="sheet"><h2>遊戲規則</h2><div class="sub">約 20–30 分鐘・2–4 人・可混搭真人與電腦</div><div class="rules">
+    <h3>勝利條件</h3><ul><li>同時達成：<b>16 分以上</b>、<b>五色英雄卡各至少一張</b>、<b>至少一張星核卡</b>（第 III 階、上方有白色星核結晶的卡）。</li><li>有人達成後，打完這一輪（每人回合數相同）才結算。達成條件者中分數最高者獲勝；同分時招募卡較少者勝。</li></ul>
+    <h3>每回合擇一行動</h3><ul><li>拿 3 顆<b>不同顏色</b>晶石。</li><li>拿 2 顆<b>同色</b>晶石（該色庫存需 ≥4）。</li><li><b>保留</b> 1 張場上的卡或牌堆頂的卡，並拿 1 顆<b>星塵</b>（萬用晶石）。最多保留 3 張。</li><li><b>招募</b> 1 張場上或保留區的卡，支付卡片左下的晶石。</li></ul>
+    <h3>折扣與限制</h3><ul><li>每張招募的英雄提供該色 1 點<b>永久折扣</b>（右上角的寶石）。</li><li>手上晶石上限 10 顆，超過必須歸還。</li><li>能負擔的卡會亮綠框；費用數字外加白圈表示你的折扣已足以抵掉這一色。</li></ul>
+    <h3>據點與星盟之證</h3><ul><li><b>據點</b>：回合結束時折扣達到需求即自動解放，+3 分（每回合最多一個）。</li><li><b>星盟之證</b>：最先擁有 ${ALLY_MIN} 枚★徽章者取得，+3 分；之後若有人徽章數<b>超過</b>持有者就會被奪走。</li></ul>
+    <h3>線上對戰</h3><ul><li>在「線上對戰」建立房間，把 4 碼房號或邀請連結傳給朋友即可加入；房主可把空位設成電腦。</li><li>玩家之間直接連線，房主的頁面就是主機：房主請保持頁面開著，不要關閉或切走太久。</li><li>有人斷線時，輪到他時可按「改由電腦代打」；斷線的人重新打開連結會自動回到座位。</li></ul>
+    </div><div class="acts"><button class="btn primary" data-act="closerules">知道了</button></div></div>`}
+function overlayHTML(){
+  if(UI.rules)return rulesHTML();
+  if(UI.menu)return menuHTML();
+  if(MODE==='online'&&NET.doc&&NET.doc.status==='lobby')return lobbyHTML();
+  if(MODE==='online'&&!NET.doc)return `<div class="sheet"><h2>連線中…</h2><div class="sub">正在進入房間 ${esc(NET.code||'')}</div><div class="note">${esc(NET.status||'')}</div><div class="acts"><button class="btn" data-act="leavegame">取消</button></div></div>`;
+  if(!G)return '';
+  if(G.over&&!UI.viewBoard){
+    const order=G.players.map((_,i)=>i).sort((a,b)=>(b===G.winner)-(a===G.winner)||score(b)-score(a));
+    const online=MODE==='online';const host=online&&NET.role==='host';
+    return `<div class="sheet"><h2>${esc(P(G.winner).name)} 獲勝</h2><div class="sub">共進行 ${G.round-1} 輪</div>
+     <div class="rank">${order.map((i,r)=>`<div class="ri${i===G.winner?' win':''}"><span class="pos">${r+1}</span><div><div style="font-weight:700">${esc(P(i).name)}</div><div style="font-size:11.5px;color:var(--muted)">${meetsWin(i)?'<span class="good">達成勝利條件</span>':'未達成條件'}・卡 ${P(i).cards} 張・據點 ${P(i).locs.length}</div></div><span class="sc">${score(i)}</span></div>`).join('')}</div>
+     <div class="acts"><button class="btn" data-act="viewboard">看盤面</button>${online?`<button class="btn" data-act="leavegame">離開房間</button>${host?'<button class="btn primary" data-act="rematch">再來一局</button>':'<span class="note" style="align-self:center">等待房主開新局…</span>'}`:'<button class="btn primary" data-act="again">再來一局</button>'}</div></div>`;
+  }
+  const s=UI.sheet;if(!s)return '';
+  const fi=focus();const p=P(fi);
+  if(s.kind==='deck'){
+    const ok=myTurn()&&p.reserved.length<MAXRES&&G.decks[s.t].length;
+    return `<div class="sheet"><h2>第 ${ROMAN[s.t]} 階牌堆</h2><div class="sub">剩 ${G.decks[s.t].length} 張・盲抽保留一張</div>
+      <div class="info" style="font-size:13px">保留後可獲得 1 顆星塵${G.bank.w?'':'（星塵已用完）'}。你目前保留 ${p.reserved.length}/3 張。</div>
+      <div class="acts"><button class="btn" data-act="close">取消</button>${myTurn()?`<button class="btn primary" data-act="rdeck" ${ok?'':'disabled'}>保留牌堆頂</button>`:''}</div></div>`;
+  }
+  const c=s.src==='m'?G.market[s.t][s.i]:p.reserved[s.i];if(!c)return '';
+  const pl=payPlan(p,c);const aff=pl.short===0;
+  const payTxt=aff?`<div class="pay">支付：${pl.parts.map(([k,v])=>`<span class="rq k-${k}">${CS[k]}×${v}</span>`).join('')}${pl.wildUse?`<span class="rq k-w">塵×${pl.wildUse}</span>`:''}${!pl.parts.length&&!pl.wildUse?'<span class="good">免費（折扣已全抵）</span>':''}</div>`
+     :`<div class="warn">還缺 ${pl.short} 顆：${Object.entries(pl.gap).map(([k,v])=>`${CS[k]}×${v}`).join('、')}${p.tokens.w?`（已計入星塵 ${p.tokens.w}）`:''}</div>`;
+  const canRes=s.src==='m'&&p.reserved.length<MAXRES;
+  return `<div class="sheet"><h2>${esc(c.name)}</h2><div class="sub">第 ${ROMAN[c.tier]} 階英雄${s.src==='r'?'・保留中':''}</div>
+   <div class="row"><div class="big">${cardHTML(c,'tabindex="-1" style="cursor:default"')}</div>
+   <div class="info"><div>分數：<b>${c.pts}</b></div><div>永久折扣：<span class="rq k-${c.color}" style="width:auto;padding:0 6px">${CN[c.color]} +1</span></div>
+   ${c.icons?`<div>星盟徽章 ×${c.icons}</div>`:''}${c.core?'<div style="color:var(--c)">◎ 星核卡（勝利條件之一）</div>':''}
+   ${payTxt}</div></div>
+   <div class="acts"><button class="btn" data-act="close">取消</button>
+   ${myTurn()&&s.src==='m'?`<button class="btn" data-act="res" ${canRes?'':'disabled'}>保留${G.bank.w?'＋星塵':''}</button>`:''}
+   ${myTurn()?`<button class="btn primary" data-act="buy" ${aff?'':'disabled'}>招募</button>`:''}</div></div>`;
+}
+
+const AI_NAMES=['星語','鐵砧','夜梟'];
+function defaultSeats(n){const s=[{name:'你',kind:'human'}];for(let i=1;i<n;i++)s.push({name:AI_NAMES[i-1],kind:'ai2'});return s}
+function menuHTML(){
+  const m=UI.menu;
+  const tabs=`<div class="tabs"><button class="${m.tab==='local'?'on':''}" data-act="tab" data-tab="local">本機遊戲</button><button class="${m.tab==='online'?'on':''}" data-act="tab" data-tab="online">線上對戰</button></div>`;
+  const cancel=G&&MODE==='local'?'<button class="btn" data-act="closemenu">回到遊戲</button>':'';
+  let body='';
+  if(m.tab==='local'){
+    const saved=loadSave();
+    body=`<div class="sublab">玩家人數</div>
+     <div class="seg">${[2,3,4].map(n=>`<button class="${m.seats.length===n?'on':''}" data-act="pcount" data-n="${n}">${n} 人</button>`).join('')}</div>
+     <div style="margin-top:12px">${m.seats.map((s,i)=>`<div class="seat"><span class="no">${i+1}</span>
+       <input id="seatname${i}" value="${esc(s.name)}" maxlength="8" data-seat="${i}" aria-label="玩家 ${i+1} 名稱">
+       <select id="seatkind${i}" data-seatk="${i}" aria-label="玩家 ${i+1} 類型">${[['human','真人（同機輪流）'],['ai1','電腦・簡單'],['ai2','電腦・普通'],['ai3','電腦・困難']].map(([v,t])=>`<option value="${v}"${s.kind===v?' selected':''}>${t}</option>`).join('')}</select></div>`).join('')}</div>
+     <div class="note" style="margin-top:10px">第 1 位玩家先手。多位真人時，在同一台裝置輪流操作。</div>
+     <div class="acts">${cancel}${saved&&!saved.over&&!(G&&MODE==='local')?'<button class="btn" data-act="resume">繼續上一局</button>':''}<button class="btn" data-act="rules">規則</button><button class="btn primary" data-act="start">開始遊戲</button></div>`;
+  }else{
+    body=onlineMenuHTML()+`<div class="acts">${cancel}<button class="btn" data-act="rules">規則</button></div>`;
+  }
+  return `<div class="sheet setup"><h2>星晶守護者</h2><div class="sub">收集五色晶石，招募英雄，解放據點，奪取星核。</div>${tabs}${body}</div>`;
+}
+function onlineMenuHTML(){
+  const m=UI.menu;const h=loadHost();const lr=lastRoom();
+  const resume=(h?`<div class="roomrow"><span class="rc">${esc(h.code)}</span><span class="rm">你主持的房間${h.G&&!h.G.over?'・對局進行中':''}</span><button class="btn sm" data-act="resumehost">繼續主持</button></div>`:'')+
+    (lr&&(!h||h.code!==lr)?`<div class="roomrow"><span class="rc">${esc(lr)}</span><span class="rm">上次加入的房間</span><button class="btn sm" data-act="joinlast">回到房間</button></div>`:'');
+  return `${hasPeer()?'':'<div class="errmsg" style="margin:0 0 10px">連線元件載入失敗，請確認網路後重新整理頁面。</div>'}
+   <div class="sublab">你的暱稱</div><div class="fld"><input id="nick" maxlength="10" value="${esc(nick())}" data-nick="1" aria-label="暱稱"></div>
+   <div class="grp"><div class="sublab">建立房間（你的頁面當主機）</div><div class="fld"><div class="seg">${[2,3,4].map(n=>`<button class="${m.cap===n?'on':''}" data-act="cap" data-n="${n}">${n} 人</button>`).join('')}</div><button class="btn primary" data-act="create">建立房間</button></div></div>
+   <div class="grp"><div class="sublab">輸入房號加入</div><div class="fld"><input id="joincode" class="code" maxlength="4" placeholder="ABCD" value="${esc(m.code||'')}" data-code="1" aria-label="房號"><button class="btn" data-act="join">加入</button></div></div>
+   ${NET.err?`<div class="errmsg">${esc(NET.err)}</div>`:''}
+   ${resume?`<div class="grp"><div class="sublab">我的房間</div><div class="rooms">${resume}</div></div>`:''}
+   <div class="note" style="margin-top:14px">玩家之間直接連線，不需要帳號。朋友打開同一個網址，輸入房號或點你傳的邀請連結就能加入。</div>`;
+}
+function lobbyHTML(){
+  const d=NET.doc;const host=NET.role==='host';
+  const filled=d.seats.filter(s=>s.type!=='open').length;
+  const seats=d.seats.map((s,i)=>{
+    let who,ctl='';
+    if(s.type==='human'){who=`<span class="dot${isOnline(s.uid)?' on':''}"></span><span class="nm">${esc(s.nick||'玩家')}</span>${s.uid===d.host?'<span class="tagx">房主</span>':''}${s.uid===NET.myId?'<span class="tagx">你</span>':''}`;
+      if(host&&i>0)ctl=`<button class="btn sm" data-act="kick" data-i="${i}">移出</button>`}
+    else{who=`<span class="nm" style="color:${s.type==='open'?'var(--dim)':'var(--text)'}">${s.type==='open'?'空位・等待玩家加入':esc(s.nick)}</span>`;
+      if(host)ctl=`<select id="lseat${i}" data-lseat="${i}" aria-label="座位 ${i+1}">${[['open','空位'],['ai1','電腦・簡單'],['ai2','電腦・普通'],['ai3','電腦・困難']].map(([v,t])=>`<option value="${v}"${(s.type==='open'&&v==='open')||(s.type==='ai'&&v==='ai'+s.level)?' selected':''}>${t}</option>`).join('')}</select>`}
+    return `<div class="lseat"><span class="no">${i+1}</span>${who}${ctl}</div>`}).join('');
+  return `<div class="sheet setup"><div class="sublab">線上房間</div>
+   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><span class="bigcode" id="roomcode">${esc(d.code)}</span><button class="btn sm" data-act="copycode">複製房號</button><button class="btn sm" data-act="copylink">複製邀請連結</button></div>
+   <div class="note" style="margin-top:8px">${NET.status?`<span class="warn">${esc(NET.status)}</span><br>`:''}把房號或邀請連結傳給朋友，他們打開這個網址就能加入。${host?'你是主機，對局中請保持這個頁面開著。':''}</div>
+   <div class="note" id="linktext" style="margin-top:6px;word-break:break-all;font-size:11.5px;color:var(--dim)">${esc(inviteLink(d.code))}</div>
+   <div style="margin-top:10px">${seats}</div>
+   ${UI.toast?`<div class="note" style="margin-top:8px;color:var(--ok)">${esc(UI.toast)}</div>`:''}
+   <div class="acts"><button class="btn" data-act="leavegame">${host?'關閉房間':'離開房間'}</button>${host?`<button class="btn primary" data-act="ostart" ${filled>=2?'':'disabled'}>開始遊戲（${filled} 人）</button>`:'<span class="note" style="align-self:center">等待房主開始…</span>'}</div></div>`;
+}
+
+// ---------- events ----------
+document.addEventListener('input',e=>{const t=e.target;
+  if(t.dataset.seat!==undefined&&UI.menu)UI.menu.seats[+t.dataset.seat].name=t.value;
+  if(t.dataset.nick){setNick(t.value.trim())}
+  if(t.dataset.code&&UI.menu){UI.menu.code=t.value.toUpperCase()}
+});
+document.addEventListener('change',e=>{const t=e.target;
+  if(t.dataset.seatk!==undefined&&UI.menu)UI.menu.seats[+t.dataset.seatk].kind=t.value;
+  if(t.dataset.lseat!==undefined)hostSetSeat(+t.dataset.lseat,t.value);
+});
+document.addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ')&&e.target.dataset&&e.target.dataset.act==='ret'){e.preventDefault();e.target.click()}
+  if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.code){e.preventDefault();guestJoin(e.target.value)}
+  if(e.key==='Escape'&&(UI.sheet||UI.rules)){UI.sheet=null;UI.rules=false;renderOverlay()}
+});
+document.addEventListener('click',e=>{
+  const ovEl=document.getElementById('ov');
+  if(ovEl&&e.target===ovEl&&(UI.sheet||UI.rules)){UI.sheet=null;UI.rules=false;renderOverlay();return}
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const a=el.dataset.act;
+  switch(a){
+    case 'tok':toggleTok(el.dataset.k);break;
+    case 'clr':UI.sel=[];render();break;
+    case 'take':if(myTurn()&&UI.sel.length)act({type:'take',cols:UI.sel.slice()});break;
+    case 'card':UI.sheet={kind:'card',src:'m',t:+el.dataset.t,i:+el.dataset.i};renderOverlay();break;
+    case 'rcard':UI.sheet={kind:'card',src:'r',i:+el.dataset.i};renderOverlay();break;
+    case 'deck':if(G.decks[+el.dataset.t].length){UI.sheet={kind:'deck',t:+el.dataset.t};renderOverlay()}break;
+    case 'close':UI.sheet=null;renderOverlay();break;
+    case 'buy':{const s=UI.sheet;if(!myTurn()||!s)break;const p=P(G.cur);const c=s.src==='m'?G.market[s.t][s.i]:p.reserved[s.i];if(c&&canAfford(p,c))act({type:'buy',src:s.src,t:s.t||c.tier,idx:s.i});break}
+    case 'res':{const s=UI.sheet;if(myTurn()&&s&&P(G.cur).reserved.length<MAXRES)act({type:'reserve',t:s.t,idx:s.i});break}
+    case 'rdeck':{const s=UI.sheet;if(myTurn()&&s&&P(G.cur).reserved.length<MAXRES)act({type:'reserve',t:s.t,idx:-1});break}
+    case 'ret':{if(!myDiscard())break;const k=el.dataset.k;if(MODE==='online'&&NET.role==='guest'){guestSend({t:'ret',k});render();break}if(MODE==='online'){returnToken(k);break}const p=P(G.cur);if(p.tokens[k]>0){p.tokens[k]--;G.bank[k]++;if(tokTotal(p)<=MAXTOK){addLog(`${nm(p)} 歸還晶石至 10 顆`);finishTurn(G.cur)}else render()}break}
+    case 'hint':{const d=aiDecide(G.cur);UI.hint=hintText(d);render();break}
+    case 'pass':if(myTurn())act({type:'pass'});break;
+    case 'takeover':takeover(+el.dataset.i);break;
+    case 'rules':UI.rules=true;renderOverlay();break;
+    case 'closerules':UI.rules=false;renderOverlay();break;
+    case 'menu':UI.menu={tab:'local',seats:G?G.players.map(p=>({name:p.name,kind:p.type==='human'?'human':'ai'+p.level})):defaultSeats(2),cap:2};renderOverlay();break;
+    case 'closemenu':UI.menu=null;renderOverlay();break;
+    case 'tab':UI.menu.tab=el.dataset.tab;NET.err='';renderOverlay();break;
+    case 'again':UI.menu={tab:'local',seats:G.players.map(p=>({name:p.name,kind:p.type==='human'?'human':'ai'+p.level})),cap:2};renderOverlay();break;
+    case 'viewboard':UI.viewBoard=true;render();break;
+    case 'pcount':{const n=+el.dataset.n;const cur=UI.menu.seats;UI.menu.seats=defaultSeats(n).map((s,i)=>cur[i]||s);renderOverlay();break}
+    case 'cap':UI.menu.cap=+el.dataset.n;renderOverlay();break;
+    case 'resume':{const g=loadSave();if(g){MODE='local';G=g;UI.menu=null;UI.anim=new Set();UI.viewBoard=false;UI.lastHuman=Math.max(0,G.players.findIndex(p=>p.type==='human'));render();schedule()}break}
+    case 'start':{const seats=UI.menu.seats.map((s,i)=>({name:(s.name||'').trim()||`玩家${i+1}`,type:s.kind==='human'?'human':'ai',level:s.kind==='human'?0:+s.kind.slice(2)}));UI.menu=null;clearTimeout(timer);MODE='local';newGame(seats);save();render();schedule();break}
+    case 'create':hostCreate(UI.menu.cap||2);break;
+    case 'join':{const v=(document.getElementById('joincode')||{}).value;guestJoin(v);break}
+            case 'leavegame':leaveRoom();break;
+    case 'ostart':hostStart();break;
+    case 'kick':hostKick(+el.dataset.i);break;
+    case 'resumehost':{const h=loadHost();if(h)openHost(h.code,h.doc,h.G,true);break}
+    case 'joinlast':guestJoin(lastRoom());break;
+    case 'copylink':{const link=inviteLink(NET.doc.code);const done=()=>{UI.toast='已複製邀請連結';renderOverlay();setTimeout(()=>{UI.toast='';renderOverlay()},2500)};try{navigator.clipboard.writeText(link).then(done,()=>{selText('linktext');UI.toast='請手動複製上方連結';renderOverlay()})}catch(err){selText('linktext')}break}
+    case 'rematch':rematch();break;
+    case 'copycode':{const code=NET.doc&&NET.doc.code;const done=()=>{UI.toast='已複製房號 '+code;renderOverlay();setTimeout(()=>{UI.toast='';renderOverlay()},2500)};
+      try{navigator.clipboard.writeText(code).then(done,()=>{selectCode();UI.toast='請手動複製房號';renderOverlay()})}catch(err){selectCode()}break}
+  }
+});
+function selText(id){const el=document.getElementById(id);if(!el)return;const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+function selectCode(){const el=document.getElementById('roomcode');if(!el)return;const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+function hintText(d){
+  if(!d)return '';
+  if(d.type==='buy')return `建議：<b>招募 ${d.why.c.name}</b>（${d.src==='r'?'保留區':'場上'}）`;
+  if(d.type==='take'){const t=d.cols.length===2&&d.cols[0]===d.cols[1]?`2 顆${CN[d.cols[0]]}`:d.cols.map(k=>CN[k]).join('、');return `建議：<b>拿取 ${t}</b>${d.why?`，瞄準 ${d.why.c.name}`:''}`}
+  if(d.type==='reserve')return `建議：<b>保留 ${d.why?d.why.c.name:'一張卡'}</b>，同時拿星塵`;
+  return '目前沒有好的行動，只能跳過。';
+}
+
+function boot(){
+  const saved=loadSave();
+  if(saved&&!saved.over){G=saved;UI.lastHuman=Math.max(0,G.players.findIndex(p=>p.type==='human'));for(const t of [1,2,3])G.market[t].forEach(c=>c&&UI.anim.add(c.id));G.players.forEach(p=>p.reserved.forEach(c=>UI.anim.add(c.id)));UI.menu={tab:'local',seats:G.players.map(p=>({name:p.name,kind:p.type==='human'?'human':'ai'+p.level})),cap:2};render();return}
+  newGame([{name:'你',type:'human',level:0},{name:'星語',type:'ai',level:2}]);
+  UI.menu={tab:'local',seats:defaultSeats(2),cap:2};
+  render();
+}
+boot();
+(()=>{const q=new URLSearchParams(location.search);const r=(q.get('room')||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(r.length===4){const h=loadHost();if(h&&h.code===r){openHost(h.code,h.doc,h.G,true)}else if(lastRoom()===r&&hasPeer()){guestJoin(r)}else{UI.menu={tab:'online',seats:defaultSeats(2),cap:2,code:r};NET.err='';render();}}})();
+window.addEventListener('beforeunload',e=>{if(NET.role==='host'&&G&&!G.over){e.preventDefault();e.returnValue=''}});
+})();
+</script>
+
+</body>
+</html>
